@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section id="blog-section" class="blog-section w100dt mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12 l12">
+					<div class="blogs mb-30">
+						<div class="card">
+							<div class="card-content w100dt">
+								<span class="card-title">
+                                    {{title}}
+								</span>
+								<p>
+                                    <form action="" method="POST">
+                                        <!-- #实现在配置中激活的csrf保护 -->
+                                        {{ form.csrf_token }}
+                                        {{ form.title.label }}
+                                        <br>
+                                            {{ form.title() }}
+                                            {% for error in form.title.errors %}
+                                                <span class="error" >{{error}}</span>
+                                            {% endfor %}
+                                        <br>
+                                            {{ form.content.label }}
+                                        <br>
+                                            {{ form.content() }}
+                                            {% for error in form.content.errors %}
+                                                <span class="error">{{error}}</span>
+                                            {% endfor %}
+                                        <p>
+                                            {{form.submit()}}
+                                            <a type="button"  class="btn btn-danger" href={{url_for('home')}}>取消</a>
+                                        </p>
+                                    </form>
+								</p>
+							</div><!-- /.card-content -->
+						</div>
+					</div>
+					<!-- /.card -->
+				</div>
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+</section>
+
+{% endblock %}
+{% block script %}
+    {{ super() }}
+    <!-- 加载ckeditor的js等模块 -->
+    {{ckeditor.load()}}
+    {{ ckeditor.load_code_theme() }}
+    {{ckeditor.config(name='content')}}
+{% endblock %}

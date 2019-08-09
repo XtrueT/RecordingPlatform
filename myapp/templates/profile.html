@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section id="blog-section" class="blog-section w100dt mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m8 l8">
+					<div class="blogs mb-30">
+						<div class="card">
+							<div class="card-content w100dt">
+								<span class="card-title">
+									修改信息
+								</span>
+								<p>
+									<form action="{{url_for('profile')}}" method="POST" enctype="multipart/form-data">
+										<!-- #实现在配置中激活的csrf保护 -->
+										{{ form.csrf_token }}
+										<br>
+										{{form.username.label}}
+										{{form.username()}}
+										<br>
+										{{ form.description.label}}
+										{{ form.description()}}
+										<br>
+										{% for error in form.description.errors %}
+										<span class="error">{{error}}</span>
+										{% endfor %}
+										<br>
+										{{form.submit()}}
+									</form>
+								</p>
+							</div><!-- /.card-content -->
+						</div>
+					</div>
+					<!-- /.card -->
+					<div class="blogs mb-30">
+						<div class="card">
+						<div class="card-content w100dt">
+							<span class="card-title">
+								修改头像
+							</span>
+							<div class="row">
+								<div class="col m6 s12">
+								<form action="{{url_for('upload_img')}}" method="POST" enctype="multipart/form-data">
+									<!-- #实现在配置中激活的csrf保护 -->
+									{{ img_form.csrf_token }}
+									<p>
+										{{ img_form.upload_photo(onchange="getPhoto(this)")}}
+									</p>
+										{% for error in img_form.upload_photo.errors %}
+											<span class="error">{{ error }}</span>
+										{% endfor %}
+									<P>
+										{{ img_form.submit }}
+									</P>
+								</form>
+								</div>
+								<div class="col m6 s12">
+									<div id="img">
+										<img id="img_view" src=""/>
+									</div>
+								</div>
+							</div>
+						</div><!-- /.card-content -->
+						</div>
+					</div>
+				</div>
+                <!-- colm8 -->
+                <div class="col s12 m4 l4">
+					{% include 'userprofile.html' %}  
+                </div>	
+                <!-- colm4 -->
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+</section>
+{% endblock %}
+{% block script %}
+<script>
+        var imgurl = "";
+        function getPhoto(node) {
+                var imgURL = "";
+                try {
+                        var file = null;
+                        if (node.files && node.files[0]) {
+                                file = node.files[0];
+                        } else if (node.files && node.files.item(0)) {
+                                file = node.files.item(0);
+                        }
+                        //Firefox 因安全性问题已无法直接通过input[file].value 获取完整的文件路径  
+                        try {
+                                imgURL = file.getAsDataURL();
+                        } catch (e) {
+                                imgRUL = window.URL.createObjectURL(file);
+                        }
+                } catch (e) {
+                        if (node.files && node.files[0]) {
+                                var reader = new FileReader();
+                                reader.onload = function (e) {
+                                        imgURL = e.target.result;
+                                };
+                                reader.readAsDataURL(node.files[0]);
+                        }
+                }
+                creatImg(imgRUL); //显示图片
+                return imgURL;
+        }
+
+        function creatImg(imgRUL) {
+				document.getElementById("img_view").src = imgRUL;
+				$("#img_view").addClass("user_img")
+                $('#img_view').viewer({
+						url: 'src',
+						
+                });
+        }
+</script>
+{% endblock %}

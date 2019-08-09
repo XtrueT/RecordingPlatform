@@ -1,0 +1,49 @@
+<div class="blogs mb-30">
+    <div class="card">
+        <div class="card-content w100dt">
+            <a href="{{ url_for('detail',post_id=post.id)}}" class="card-title">
+                {{ post.title }}
+            </a>
+            <main>
+                <p>
+                    {{ post.body | truncate(3,True) |safe  }}
+                </p>
+            </main>
+            <ul class="post-mate-time left">
+                <li>
+                    <p class="hero left">
+                        By - <a href="#" class="l-blue">{{post.post_username.username}}</a>
+                    </p>
+                </li>
+                <li>
+                    <i class="icofont icofont-ui-calendar"> -{{ post.timestamp}}</i> 
+                </li>
+            </ul>
+            <ul class="post-mate right">
+                {% if title == 'Posts' %}
+                <li class="edit">
+                    <a type="button" href="{{url_for('updata',post_page=posts.page,post_title=post.title)}}">
+                        <i class="icofont icofont-edit"></i> 修改
+                    </a>
+                </li>
+                <li class="delete">
+                    <a type="button" href="{{url_for('delete',post_page=posts.page,post_title=post.title)}}">
+                        <i class="icofont icofont-delete"></i> 删除
+                    </a>
+                </li>
+                {%endif%}
+                <li class="like">
+                    <a href="#">
+                        <i class="icofont icofont-heart-alt"></i> 55
+                    </a>
+                </li>
+                <li class="comment">
+                    <a href="#">
+                        <i class="icofont icofont-comment"></i> 32
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.card-content -->
+    </div>
+</div>

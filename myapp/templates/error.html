@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- ==================== error-section start ==================== -->
+<section id="error-section" class="error-section w100dt mb-50">
+    <div class="container">
+        <div class="error-contant center-align">
+            <h2 class="error-head-title">{{code}}</h2>
+            <p>
+            It looks like that page  
+            <br/>
+            {{error}}.
+            <br/>
+            Would you like to go to <a href="{{url_for('home')}}">homepage</a> instead?
+            </p>
+        </div>
+        <!-- /.error-contant -->
+        </div>
+    <!-- container -->
+</section>
+<!-- /#error-section -->
+<!-- ==================== error-section end ==================== -->
+{% endblock%}

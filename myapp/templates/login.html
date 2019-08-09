@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- ==================== login-section start ==================== -->
+<section id="contact-section" class="contact-section w100dt mb-50">
+        <div class="container">
+            <div class="col m12 s12">
+                    <div class="sidebar-title left-align">
+                        <h2>Login</h2>
+                    </div>
+
+                    <div class="contact-me">
+                        <div class="row">
+                            <div class="col m6 s12">
+                                <form action="" method="POST" class="contact-form">
+                                    <!-- #实现在配置中激活的csrf保护 -->
+                                    {{ form.hidden_tag() }}
+                                        {{ form.email.label }}
+                                    <p>
+                                        {{ form.email() }}
+                                        {% for error in form.email.errors %}
+                                            <span class="error">{{error}}</span>
+                                        {% endfor %}
+                                    </p>
+                                        {{ form.password.label }}
+                                    <p>
+                                        {{ form.password() }}
+                                        {% for error in form.password.errors %}
+                                            <span class="error">{{error}}</span>
+                                        {% endfor %}   
+                                    </p>
+                                    <p>
+                                        {{form.remember_me()}}    
+                                        {{form.remember_me.label}}
+                                    </p>
+                                    <p>
+                                        {{form.submit()}}
+                                    </p>
+                                    <p>
+                                        <a href={{url_for('signup')}}>还没有帐号？去注册</a>
+                                    </p>
+                                </form>
+                                <!-- /.contact-form -->
+                            </div>
+                            <!-- colsm6 -->
+
+                            <div class="col m6 s12 .hidden-xs">
+                                <p class="mb-30">
+                                    If you have any questions, please contact us through our online support system and we will contact you shortly. Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore.
+                                </p>
+
+                                <div class="contact-things">
+                                    <div class="c-icon">
+                                        <i class="icofont icofont-location-pin"></i>
+                                    </div>
+                                    <div class="c-text p-0">
+                                        <p>452 Town road, Big House</p>
+                                        <p>New York, NY  45896</p>
+                                    </div>
+                                </div>
+                                <!-- /.contact-things -->
+                                <div class="contact-things">
+                                    <div class="c-icon">
+                                        <i class="icofont icofont-phone"></i>
+                                    </div>
+                                    <div class="c-text">
+                                        <p>+88016 8063 6189</p>
+                                    </div>
+                                </div>
+                                <!-- /.contact-things -->
+                                <div class="contact-things">
+                                    <div class="c-icon">
+                                        <i class="icofont icofont-send-mail"></i>
+                                    </div>
+                                    <div class="c-text">
+                                        <p>info@sitename.com</p>
+                                    </div>
+                                </div>
+                                <!-- /.contact-things -->
+                            </div>
+                            <!-- colsm6 -->
+
+
+                        </div>
+                        <!-- row -->
+                    </div>
+                    <!-- /.contact-me -->
+            </div>
+        </div>
+        <!-- container -->
+</section>
+<!-- /#login-section -->
+<!-- ==================== login-section end ==================== -->
+{% endblock %}

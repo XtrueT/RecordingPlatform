@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- =================== single-blog-section start ====================-->
+<section id="single-blog-section" class="single-blog-section w100dt mb-50">
+	<div class="container">
+		<div class="row">
+			<div class="col m12 s12">
+
+				<div class="blogs mb-30">
+					<div class="card">
+						<div class="card-content w100dt">
+							<p>
+								<span href="#" class="card-title mb-30">
+								{{ post.title }}
+								</span>
+							</p>
+							<p>
+								<span class="l-blue">By - {{ post.post_username.username }}</span>
+								<span><i class="icofont icofont-ui-calendar"></i>{{ post.timestamp}}</span>
+							</p>
+							<hr/>
+							<div class="mb-30">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col m12 s12 responsive-img">
+											{{ post.body | safe }}
+										</div>
+									</div>
+								</div>
+							</div>
+							<p></p>
+							<div class="mb-30">
+								<ul class="post-mate-time left mb-30">
+									<li class="like">
+										<span>
+											<i class="icofont icofont-heart-alt"></i> 55
+										</span>
+									</li>
+									<li class="comment">
+										<span>
+											<i class="icofont icofont-comment"></i> 32
+										</span>
+									</li>
+								</ul>
+								<ul class="share-links right">
+									<li>
+										<a href="#" class="facebook">
+										<i class="icofont icofont-social-facebook"></i>
+										</a>
+									</li>
+									<li><a href="#" class="twitter"><i class="icofont icofont-social-twitter"></i></a></li>
+									<li><a href="#" class="google-plus"><i
+												class="icofont icofont-social-google-plus"></i></a></li>
+									<li><a href="#" class="linkedin"><i class="icofont icofont-brand-linkedin"></i></a></li>
+									<li><a href="#" class="pinterest"><i class="icofont icofont-social-pinterest"></i></a>
+									</li>
+									<li><a href="#" class="instagram"><i class="icofont icofont-social-instagram"></i></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /.card  -->
+				</div>
+				<!-- /.blogs -->
+				{% include 'carousel.html' %}
+
+				{% include 'comment.html' %}
+
+				<div class="leave-comment mb-30" >
+
+					<div class="sidebar-title center-align">
+						<h2>Leave Your Comment</h2>
+					</div>
+
+					<form class="comment-area w100dt" action="#">
+						<div class="row">
+							<div class="col m6 s12">
+								<div class="form-item">
+									<input id="icon_prefix" type="text" class="validate">
+									<label for="icon_prefix">First Name</label>
+								</div>
+							</div>
+							<div class="col m6 s12">
+								<div class="form-item">
+									<input id="email" type="email" class="validate">
+									<label for="email" data-error="wrong" data-success="right">Email</label>
+								</div>
+							</div>
+							<div class="col s12">
+								<div class="form-item">
+									<textarea id="textarea1" class="materialize-textarea"></textarea>
+									<label for="textarea1">Textarea</label>
+								</div>
+							</div>
+						</div>
+						<!-- row -->
+						<button type="button" class="custom-btn waves-effect waves-light right">SUBMIT NOW</button>
+					</form>
+					<!-- /.comment-area -->
+				</div>
+				<!-- /.leave-comment -->
+
+			</div>
+		</div>
+		<!-- row -->
+	</div>
+	<!-- container -->
+</section>
+<!-- /#single-blog-section -->
+<!-- ==================== single-blog-section end ====================-->
+
+{% endblock %}
