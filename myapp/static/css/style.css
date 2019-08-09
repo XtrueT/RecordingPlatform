@@ -135,7 +135,6 @@ a.sm-name {
 
 /* post-mate Start
 ================================================== */
-ul.post-mate {}
 ul.post-mate li {
   margin-left: 10px;
 }
@@ -148,7 +147,7 @@ ul.post-mate li a:hover {
 
 
 
-ul.post-mate-time {}
+
 ul.post-mate-time li {
   margin-right: 15px;
 }
@@ -762,7 +761,7 @@ ul.pagination li:hover a {
 
 /*  - 5 - cateogry-section - Start
 ==================================================================================================== */
-.cateogry-section {}
+
 
 .cateogry-section .card-title {
   line-height: 30px;
@@ -1084,7 +1083,7 @@ ul.pagination li:hover a {
 .top-post ul.top-post-tab {
   border-bottom: 1px solid #e5e5e5;
 }
-.top-post ul.top-post-tab li {}
+
 .top-post ul.top-post-tab li.tab a {
   color: #000;
   font-weight: 700;
