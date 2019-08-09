@@ -1347,12 +1347,18 @@ ul.footer-social-links li a:hover:before {height: 100%;}
   height: 50px;
 }
 
-.clear{
-  clear:both; 
-  height: 0; 
-  line-height: 0; 
-  font-size: 0
+.post-body{
+  display: block !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  color: #000 !important;
+  background-color: #C7EDCC;
+  margin-bottom: 30px !important;
+  padding: 20px;
 }
 
-
+.post-body img{
+  width: 100% !important;
+}
 /*==================================================================================================== */

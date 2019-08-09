@@ -187,6 +187,9 @@
 ------------------------------------------------------------------------------------------ */
 
 @media screen and (max-width: 768px){
+	.blogs-carousel{
+		display: none;
+	}
 	.tab-contant .hot-post a.sm-name {
 		font-size: 30px;
 		line-height: 40px;
