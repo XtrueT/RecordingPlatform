@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="card-image mb-10">
+        <img src=" {{post.post_username.user_img}} " alt="{{post.post_username.username}}">
+        <span class="effect"></span>
+    </div>
+
+    <div class="card-content w100dt">
+        <p>
+            <a href="#" class="tag left w100dt l-blue mb-10">
+                {{post.title | truncate(10,True) |safe  }}
+            </a>
+        </p>
+        <a href="{{ url_for('detail',post_id=post.id)}}" class="card-title">
+            {{post.title | truncate(10,True) |safe  }}
+        </a>
+        <ul class="post-mate-time left">
+            <li>
+                <p class="hero left">
+                    BY - <span class="l-blue">{{post.post_username.username}}</span>
+                </p>
+            </li>
+        </ul>
+
+        <ul class="post-mate right">
+            <li class="like">
+                <a href="#">
+                    <i class="icofont icofont-heart-alt"></i> 55
+                </a>
+            </li>
+            <li class="comment">
+                <a href="#">
+                    <i class="icofont icofont-comment"></i> 32
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

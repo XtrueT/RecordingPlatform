@@ -37,6 +37,7 @@ def home(page=1):
     #blogs = user.posts.paginate(1, Per_page, False).items
     #获得所有人的post
     posts = Post.query.order_by(db.desc(Post.timestamp)).paginate(page,Per_page,False)
+    sideposts = Post.query.order_by(db.desc(Post.timestamp)).limit(2).all()
     # has_next：如果在目前页后至少还有一页的话，返回 True
     # has_prev：如果在目前页之前至少还有一页的话，返回 True
     # next_num：下一页的页面数
@@ -46,6 +47,7 @@ def home(page=1):
         title='Home',
         users=users,
         posts=posts,
+        sideposts = sideposts,
         year = datetime.now().year
     )
 
