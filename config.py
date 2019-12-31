@@ -11,7 +11,7 @@ class Config(object):
     # 上传
     CKEDITOR_FILE_UPLOADER ='upload'
     # UPLOADED_PATH = os.path.join(BASE_DIR,'uploads')
-    UPLOADED_PATH = os.getcwd() +'/uploads'
+    UPLOADED_PATH = BASE_DIR+'/uploads'
     #开启Markdown 插件默认关闭
     CKEDITOR_ENABLE_MARKDOWN = True
     #开启代码块
@@ -22,6 +22,6 @@ class Config(object):
     #全文检索
     # WHOOSH_BASE = os.path.join(basedir, 'db')
     #上传文件存储地址
-    UPLOADED_PHOTOS_DEST = os.getcwd() +'/uploads'
+    UPLOADED_PHOTOS_DEST = BASE_DIR+'/uploads/photos'
     #图片大小设置
     MAX_CONTENT_LENGTH = 1024*1024*64
