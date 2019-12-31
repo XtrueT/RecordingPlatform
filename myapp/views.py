@@ -9,7 +9,7 @@ from flask import render_template,flash,redirect,url_for,request,session,g,json,
 from myapp import app,db,login,Per_page,ckeditor,photos,default_img,upload_Path
 from flask_login import current_user,login_user,logout_user,login_required
 from myapp.models import User,Post
-from myapp.forms import login_form,signup_form,profile_form,write_form,upload_form
+from myapp.forms import login_form,register_form,profile_form,write_form,upload_form
 from werkzeug.urls import url_parse
 from flask_ckeditor import upload_fail,upload_success
 import os
@@ -212,26 +212,18 @@ def login():
         year=datetime.now().year
     )
 
-@app.route('/about')
-def about():
-    return render_template(
-        'about.html',
-        title='About',
-        year=datetime.now().year
-    )
-
 @app.route('/logout')
 def logout():
     logout_user()
     flash('退出成功')
     return redirect(url_for('home'))    
 
-@app.route('/signup',methods=['GET','POST'])
-def signup():
+@app.route('/register',methods=['GET','POST'])
+def register():
     # 判断当前用户是否验证，如果通过验证，返回首页
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    form=signup_form()
+    form=register_form()
     if form.validate_on_submit():
         user = User(username=form.username.data,email=form.email.data,user_img=default_img)
         user.set_password(form.password.data)
@@ -247,9 +239,9 @@ def signup():
             return redirect(url_for('login'))
         except:
             flash('注册失败,数据库异常')
-            return redirect(url_for('signup'))
+            return redirect(url_for('register'))
     return render_template(
-        'signup.html',
+        'register.html',
         title='Register',
         form=form,
         year=datetime.now().year

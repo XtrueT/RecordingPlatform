@@ -12,73 +12,71 @@
 </head>
 
 <body>
-	<nav class="blue lighten-1">
-		<div class="nav-wrapper">
-			<a href="{{url_for('home')}}" class="brand-logo">
-				燈雨巷秋
-			</a>
-			<a href="#" data-activates="mobile-demo" class="button-collapse">
-				<i class="material-icons">menu</i>
-			</a>
-			<ul class="right hide-on-med-and-down">
-				<li {% if title == 'Home' %} class="active" {% endif%}>
-					<a href="{{ url_for('home') }}">首页</a></li>
-				{% if g.user.is_authenticated %}
-				<li {% if title == '新文章' %} class="active" {% endif%}>
-					<a href="{{url_for('write')}}">发布文章</a>
-				</li>
-				<li {% if title == 'Posts' %} class="active" {% endif%}>
-					<a href="{{url_for('posts',page=1)}}">个人主页</a>
-				</li>
-				<li class="dropdown">
-					<a href="#">
-						{{current_user.username}}
-					</a>
-					<a href="{{ url_for('logout') }}">退出</a>
-					<a href="{{ url_for('profile') }}">修改个人信息</a>
-					<!-- <img src="{{current_user.user_img}}" class="user-img"/> -->
-				</li>
-				{% else %}
-				<li {% if title == 'Login' %} class="active" {% endif%}>
-					<a href="{{ url_for('login') }}">登录</a>
-				</li>
-				<li {% if title == 'Register' %} class="active" {% endif%}>
-					<a href="{{ url_for('signup') }}">注册</a>
-				</li>
-				{% endif %}
-				<li {% if title == 'About' %} class="active" {% endif%}>
-					<a href="{{url_for('about')}}">关于</a>
-				</li>
-			</ul>
-			<ul class="side-nav" id="mobile-demo">
-				<li class="snavlogo center-align">燈雨巷秋</li>
-				<li {% if title == 'Home' %} class="active" {% endif%}>
-					<a href="{{ url_for('home') }}">首页</a></li>
-				{% if g.user.is_authenticated %}
-				<li {% if title == '新文章' %} class="active" {% endif%}>
-					<a href="{{url_for('write')}}">发布文章</a>
-				</li>
-				<li {% if title == 'Posts' %} class="active" {% endif%}>
-					<a href="{{url_for('posts',page=1)}}">个人主页</a>
-				</li>
-				{% else %}
-				<li {% if title == 'Login' %} class="active" {% endif%}>
-					<a href="{{ url_for('login') }}">登录</a>
-				</li>
-				<li {% if title == 'Register' %} class="active" {% endif%}>
-					<a href="{{ url_for('signup') }}">注册</a>
-				</li>
-				{% endif %}
-				<li {% if title == 'About' %} class="active" {% endif%}>
-					<a href="{{url_for('about')}}">关于</a>
-				</li>
-			</ul>
-		</div>
-	</nav>
+	<header class="navbar-fixed">
+		<nav class="blue lighten-1">
+			<div class="container nav-wrapper">
+				<a href="{{url_for('home')}}" class="brand-logo">
+					燈雨巷秋
+				</a>
+				<a href="#" data-activates="mobile-demo" class="button-collapse">
+					<i class="material-icons">menu</i>
+				</a>
+				<ul class="right hide-on-med-and-down">
+					<li {% if title == 'Home' %} class="active" {% endif%}>
+						<a href="{{ url_for('home') }}">首页</a></li>
+					{% if g.user.is_authenticated %}
+					<li {% if title == '新文章' %} class="active" {% endif%}>
+						<a href="{{url_for('write')}}">发布文章</a>
+					</li>
+					<li {% if title == 'Posts' %} class="active" {% endif%}>
+						<a href="{{url_for('posts',page=1)}}">个人主页</a>
+					</li>
+					<li>
+						<!-- Dropdown Trigger -->
+						<img src="{{current_user.user_img}}" data-activates='dropdown1' class="responsive-img avatar"/>{{current_user.username}}
+						<!-- Dropdown Structure -->
+						<ul id='dropdown1' class='dropdown-content'>
+							<li><a href="{{ url_for('profile') }}">修改个人信息</a></li>
+							<li class="divider"></li>
+							<li><a href="{{ url_for('logout') }}">退出</a></li>
+						</ul>
+					</li>
+					{% else %}
+					<li {% if title == 'Login' %} class="active" {% endif%}>
+						<a href="{{ url_for('login') }}">登录</a>
+					</li>
+					<li {% if title == 'Register' %} class="active" {% endif%}>
+						<a href="{{ url_for('register') }}">注册</a>
+					</li>
+					{% endif %}
+				</ul>
+				<ul class="side-nav" id="mobile-demo">
+					<li class="snavlogo center-align">燈雨巷秋</li>
+					<li {% if title == 'Home' %} class="active" {% endif%}>
+						<a href="{{ url_for('home') }}">首页</a></li>
+					{% if g.user.is_authenticated %}
+					<li {% if title == '新文章' %} class="active" {% endif%}>
+						<a href="{{url_for('write')}}">发布文章</a>
+					</li>
+					<li {% if title == 'Posts' %} class="active" {% endif%}>
+						<a href="{{url_for('posts',page=1)}}">个人主页</a>
+					</li>
+					{% else %}
+					<li {% if title == 'Login' %} class="active" {% endif%}>
+						<a href="{{ url_for('login') }}">登录</a>
+					</li>
+					<li {% if title == 'Register' %} class="active" {% endif%}>
+						<a href="{{ url_for('register') }}">注册</a>
+					</li>
+					{% endif %}
+
+				</ul>
+			</div>
+		</nav>
+	</header>
 
 
 	<main class="container">
-		{% include 'flash.html' %}
 		{% block content %}{% endblock %}
 	</main>
 
@@ -113,9 +111,15 @@
 	<script src="{{ url_for('static',filename='js/materialize.min.js') }}"></script>
 	{% block script %} {% endblock %}
 	<script>
-		$( document ).ready(function(){
+		$(document).ready(function () {
 			$(".button-collapse").sideNav();
 		})
 	</script>
+	{% for message in get_flashed_messages() %}
+		<script>
+			Materialize.toast("{{message}}", 3000, 'rounded')
+		</script>
+	{%endfor%}
 </body>
+
 </html>
