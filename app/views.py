@@ -1,18 +1,17 @@
 """
 Routes and views for the flask application.
 """
-
-from datetime import datetime
-#图片压缩
-from PIL import Image
-from flask import render_template,flash,redirect,url_for,request,session,g,json,jsonify,send_from_directory
-from myapp import app,db,login,Per_page,ckeditor,photos,default_img,upload_Path
-from flask_login import current_user,login_user,logout_user,login_required
-from myapp.models import User,Post
-from myapp.forms import login_form,register_form,profile_form,write_form,upload_form
-from werkzeug.urls import url_parse
-from flask_ckeditor import upload_fail,upload_success
 import os
+from datetime import datetime
+from werkzeug.urls import url_parse
+from flask import render_template,flash,redirect,url_for,request,session,g,json,jsonify,send_from_directory
+from flask_login import current_user,login_user,logout_user,login_required
+from flask_ckeditor import upload_fail,upload_success
+from PIL import Image
+from app import app,login,Per_page,ckeditor,photos,default_img,upload_Path
+from .models import db
+from .models import User,Post
+from .forms import login_form,register_form,profile_form,write_form,upload_form
 
 #从session里读取用户信息
 @login.user_loader

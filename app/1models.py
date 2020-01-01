@@ -31,7 +31,7 @@ class User(UserMixin,db.Model):
         
     #显示一个可读字符串
     def __repr__(self):
-        return '<User:{},{}>'.format(self.username)
+        return f'user:{self.username}'
 
     #加密密码
     def set_password(self,password):
@@ -52,6 +52,4 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post:{}>'.format(self.body)
 
-    # db.drop_all()#删除所有表
-    # db.create_all()#创建所有表
-    #
+

@@ -3,8 +3,8 @@ from wtforms import StringField,PasswordField,BooleanField,SubmitField,TextAreaF
 from flask_wtf.file import FileField,FileAllowed,FileRequired
 from wtforms.validators import DataRequired,ValidationError,Email,EqualTo,Length
 from flask_ckeditor import CKEditorField
-from myapp import photos
-from myapp.models import User
+from app import photos
+from .models import User
 
 
 class login_form(FlaskForm):
