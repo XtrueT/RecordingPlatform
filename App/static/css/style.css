@@ -1,0 +1,19 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+.box{
+    display: flex;
+}
+.user{
+    justify-content: space-around;
+    align-items: center;
+}
+.user img{
+    height: 40px;
+}

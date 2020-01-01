@@ -38,8 +38,8 @@ configure_uploads(app,photos)
 #上传大小限制，默认16MB
 patch_request_class(app,size=None)
 #设置默认头像
-default_img = 'http://localhost:5555/_uploads/photos/default.jpg'
+default_img = 'http://localhost:5555/_uploads/photos/s_i3nyfHsH31Q3wWvaWF0iXSvzx1mJK7Kh.jpg'
 
-import app.views,app.models
+import App.views,App.models
 
 

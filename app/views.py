@@ -8,10 +8,11 @@ from flask import render_template,flash,redirect,url_for,request,session,g,json,
 from flask_login import current_user,login_user,logout_user,login_required
 from flask_ckeditor import upload_fail,upload_success
 from PIL import Image
-from app import app,login,Per_page,ckeditor,photos,default_img,upload_Path
+from App import app,login,Per_page,ckeditor,photos,default_img,upload_Path
 from .models import db
 from .models import User,Post
-from .forms import login_form,register_form,profile_form,write_form,upload_form
+# from .forms import login_form,register_form,profile_form,write_form,upload_form
+from .forms import LoginForm,RegisterForm,ProfileForm,WriteForm,PostForm,UploadForm
 
 #从session里读取用户信息
 @login.user_loader
@@ -35,8 +36,8 @@ def home(page=1):
     #不能获得所有对象
     #blogs = user.posts.paginate(1, Per_page, False).items
     #获得所有人的post
-    posts = Post.query.order_by(db.desc(Post.timestamp)).paginate(page,Per_page,False)
-    sideposts = Post.query.order_by(db.desc(Post.timestamp)).limit(2).all()
+    posts = Post.query.order_by(db.desc(Post.time)).paginate(page,Per_page,False)
+    sideposts = Post.query.order_by(db.desc(Post.time)).limit(2).all()
     # has_next：如果在目前页后至少还有一页的话，返回 True
     # has_prev：如果在目前页之前至少还有一页的话，返回 True
     # next_num：下一页的页面数
@@ -53,7 +54,7 @@ def home(page=1):
 @app.route('/detail/<post_id>')
 def detail(post_id):
     post = Post.query.filter_by(id = post_id).first()
-    posts = Post.query.filter_by(user_id=post.user_id).order_by(db.desc(Post.timestamp)).limit(5).all()
+    posts = Post.query.filter_by(user_id=post.user_id).order_by(db.desc(Post.time)).limit(5).all()
     return render_template(
         'detail.html',
         title ='Detail',
@@ -66,7 +67,7 @@ def detail(post_id):
 @app.route('/posts/<int:page>')
 @login_required
 def posts(page=1):
-    posts = Post.query.filter_by(user_id=current_user.id).order_by(db.desc(Post.timestamp)).paginate(page,Per_page,False)
+    posts = Post.query.filter_by(user_id=current_user.id).order_by(db.desc(Post.time)).paginate(page,Per_page,False)
     return render_template(
         'userposts.html',
         title='Posts',
@@ -78,28 +79,26 @@ def posts(page=1):
 @app.route('/profile',methods=['GET','POST'])
 @login_required
 def profile():
-    form = profile_form()
-    img_form = upload_form()
+    form = ProfileForm()
+    img_form = UploadForm()
     if form.validate_on_submit():
         profile_username = form.username.data
         profile_description = form.description.data
-        user_en = User.query.filter_by(username=profile_username).first()
+        user_en = User.query.filter_by(name=profile_username).first()
         if  profile_description.strip(' ') == '':
             flash("输入错误")
-        elif user_en and user_en.username!=current_user.username:
+        elif user_en and user_en.username!=current_user.name:
             flash('用户名重复')
             return redirect(url_for('profile'))
         else:
             try:
-                current_user.username = profile_username
-                current_user.profile = profile_description
+                current_user.name = profile_username
                 db.session.commit()
                 flash("修改成功")
             except:
                 flash("DATABASE ERROR")
     else:
-        form.username.data = current_user.username
-        form.description.data = current_user.profile
+        form.username.data = current_user.name
     return render_template(
         'profile.html',
         form=form,
@@ -111,14 +110,14 @@ def profile():
 @app.route('/write',methods=['GET','POST'])
 @login_required
 def write():
-    form=write_form()
+    form = WriteForm ()
     if form.validate_on_submit():
         write_title = form.title.data
         write_content = form.content.data
         if  write_content.strip(' ') == '' or write_title.strip(' ') == '' :
             flash("输入错误")
             return redirect(url_for('write'))
-        post = Post(title=write_title,body = write_content,timestamp = datetime.now(),user_id = current_user.id)
+        post = Post(title=write_title,content = write_content,time = datetime.now(),user_id = current_user.id)
         try:
             db.session.add(post)
             db.session.commit()
@@ -126,7 +125,7 @@ def write():
             flash('数据库异常')
             return redirect(url_for('write'))
         flash("创建新文章成功")
-        postnew = Post.query.filter_by(user_id=current_user.id,title=write_title,body=write_content).first()
+        postnew = Post.query.filter_by(user_id=current_user.id,title=write_title,content=write_content).first()
         return redirect(url_for('detail',post_id=postnew.id))
     return render_template(
         'write.html',
@@ -150,7 +149,7 @@ def delete(post_page,post_title):
 @app.route('/updata/<int:post_page>/<string:post_title>',methods=['GET','POST'])
 @login_required
 def updata(post_page,post_title):
-    form = write_form()
+    form = WriteForm()
     post = Post.query.filter_by(user_id=current_user.id,title=post_title).first()
     if form.validate_on_submit():
         write_title = form.title.data
@@ -159,9 +158,9 @@ def updata(post_page,post_title):
             flash("输入错误")
             return redirect(url_for('updata',post_page,post_title))
         try:
-            post.body = write_content
+            post.content = write_content
             post.title = write_title
-            post.timestamp = datetime.now()
+            post.time = datetime.now()
             db.session.add(post)
             db.session.commit()
         except:
@@ -170,7 +169,7 @@ def updata(post_page,post_title):
         flash("修改文章成功")
         return redirect(url_for('posts',page=post_page))
     else:
-        form.content.data = post.body
+        form.content.data = post.content
         form.title.data = post.title
     return render_template(
         'write.html',
@@ -185,7 +184,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     #创建一个表单实例
-    form=login_form()
+    form = LoginForm()
     if form.validate_on_submit():
         #根据表格里的数据进行查询，查询到返回user对象，否则返回none
         user = User.query.filter_by(email=form.email.data).first()
@@ -222,9 +221,9 @@ def register():
     # 判断当前用户是否验证，如果通过验证，返回首页
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    form=register_form()
+    form = RegisterForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data,email=form.email.data,user_img=default_img)
+        user = User(name=form.username.data,email=form.email.data,avatar=default_img)
         user.set_password(form.password.data)
         try:
                 #创建一个user
@@ -270,9 +269,9 @@ def upload():
 @app.route('/upload_img',methods=['GET','POST'])
 @login_required
 def upload_img():
-    img_form = upload_form()
+    img_form = UploadForm()
     user = User.query.filter_by(id=current_user.id).first()
-    before_img = user.user_img
+    before_img = user.avatar
     default_img_url=default_img
     if img_form.validate_on_submit():
         #获取后缀
@@ -293,7 +292,7 @@ def upload_img():
         img_url = photos.url('s_'+newfileName)
         try:
             #更新该用户的头像
-            user.user_img = img_url
+            user.avatar = img_url
             db.session.commit()
             os.remove(path)
             print(img_url)

@@ -9,7 +9,7 @@ class Comment(db.Model):
     time = db.Column(db.DateTime,index=True)
     to_user_id = db.Column(db.Integer)
     form_user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
-    post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+    article_id = db.Column(db.Integer,db.ForeignKey('article.id'))
 
     def __repr__(self):
         return f'comment:{self.id},{self.title},{self.user_id}'

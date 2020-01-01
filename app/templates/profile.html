@@ -19,10 +19,10 @@
 										{{form.username.label}}
 										{{form.username()}}
 										<br>
-										{{ form.description.label}}
-										{{ form.description()}}
+										{{ form.email.label}}
+										{{ form.email()}}
 										<br>
-										{% for error in form.description.errors %}
+										{% for error in form.email.errors %}
 										<span class="error">{{error}}</span>
 										{% endfor %}
 										<br>

@@ -22,6 +22,6 @@ class Config(object):
     #全文检索
     # WHOOSH_BASE = os.path.join(basedir, 'db')
     #上传文件存储地址
-    UPLOADED_PHOTOS_DEST = BASE_DIR+'/uploads/photos'
+    UPLOADED_PHOTOS_DEST = BASE_DIR +'/App/static/uploads/photos'
     #图片大小设置
     MAX_CONTENT_LENGTH = 1024*1024*64
