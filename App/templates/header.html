@@ -1,0 +1,61 @@
+<header class="navbar-fixed">
+    <nav class="blue lighten-1">
+        <div class="container nav-wrapper">
+            <a href="{{url_for('main.home')}}" class="brand-logo">
+                迹
+            </a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse">
+                <i class="material-icons">menu</i>
+            </a>
+
+            <ul class="right hide-on-med-and-down">
+                <li {% if title == 'Home' %} class="active" {% endif%}>
+                    <a href="{{ url_for('main.home') }}">首页</a></li>
+                {% if g.user.is_authenticated %}
+                <li {% if title == 'Posts' %} class="active" {% endif%}>
+                    <a href="{{url_for('main.profile')}}">个人主页</a>
+                </li>
+                <li>
+                    <!-- Dropdown Trigger -->
+                    <a class="dropdown-button box user " data-activates='dropdown1' data-beloworigin="true">
+                        <img src="{{current_user.avatar}}" class="circle responsive-img avatar"
+                            alt="{{current_user.name}}" />
+                        {{current_user.name}}
+                    </a>
+                    <!-- Dropdown Structure -->
+                    <ul id='dropdown1' class='dropdown-content'>
+                        <li><a href="{{ url_for('main.logout') }}">退出</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li {% if title == 'Login' %} class="active" {% endif%}>
+                    <a href="{{ url_for('main.login') }}">登录</a>
+                </li>
+                <li {% if title == 'Register' %} class="active" {% endif%}>
+                    <a href="{{ url_for('main.register') }}">注册</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <ul class="side-nav" id="mobile-demo">
+                <li class="snavlogo center-align">迹</li>
+                <li {% if title == 'Home' %} class="active" {% endif%}>
+                    <a href="{{ url_for('main.home') }}">首页</a></li>
+                {% if g.user.is_authenticated %}
+                <li {% if title == 'Posts' %} class="active" {% endif%}>
+                    <a href="{{url_for('main.profile')}}">个人主页</a>
+                </li>
+                {% else %}
+                <li {% if title == 'Login' %} class="active" {% endif%}>
+                    <a href="{{ url_for('main.login') }}">登录</a>
+                </li>
+                <li {% if title == 'Register' %} class="active" {% endif%}>
+                    <a href="{{ url_for('main.register') }}">注册</a>
+                </li>
+                {% endif %}
+
+            </ul>
+
+        </div>
+    </nav>
+</header>

@@ -17,3 +17,7 @@ main {
 .user img{
     height: 40px;
 }
+
+.error{
+    color: crimson;
+}

@@ -4,7 +4,9 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title> {{ title }} --燈雨巷秋 </title>
+	{% block title %}
+		<title> {{ title }} -- 迹 </title>
+	{% endblock %}
 	<!--Import Google Icon Font-->
 	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!--Import materialize.css-->
@@ -13,112 +15,29 @@
 </head>
 
 <body>
-	<header class="navbar-fixed">
-		<nav class="blue lighten-1">
-			<div class="container nav-wrapper">
-				<a href="{{url_for('home')}}" class="brand-logo">
-					燈雨巷秋
-				</a>
-				<a href="#" data-activates="mobile-demo" class="button-collapse">
-					<i class="material-icons">menu</i>
-				</a>
-				<ul class="right hide-on-med-and-down">
-					<li {% if title == 'Home' %} class="active" {% endif%}>
-						<a href="{{ url_for('home') }}">首页</a></li>
-					{% if g.user.is_authenticated %}
-					<li {% if title == '新文章' %} class="active" {% endif%}>
-						<a href="{{url_for('write')}}">发布文章</a>
-					</li>
-					<li {% if title == 'Posts' %} class="active" {% endif%}>
-						<a href="{{url_for('posts',page=1)}}">个人主页</a>
-					</li>
-					<li>
-						<!-- Dropdown Trigger -->
-						<a class="dropdown-button box user " data-activates='dropdown1' data-beloworigin="true">
-							<img src="{{current_user.avatar}}" class="circle responsive-img avatar" alt="{{current_user.name}}"/>
-							{{current_user.name}}
-						</a>
-						<!-- Dropdown Structure -->
-						<ul id='dropdown1' class='dropdown-content'>
-							<li><a href="{{ url_for('profile') }}">修改个人信息</a></li>
-							<li class="divider"></li>
-							<li><a href="{{ url_for('logout') }}">退出</a></li>
-						</ul>
-					</li>
-					{% else %}
-					<li {% if title == 'Login' %} class="active" {% endif%}>
-						<a href="{{ url_for('login') }}">登录</a>
-					</li>
-					<li {% if title == 'Register' %} class="active" {% endif%}>
-						<a href="{{ url_for('register') }}">注册</a>
-					</li>
-					{% endif %}
-				</ul>
-				<ul class="side-nav" id="mobile-demo">
-					<li class="snavlogo center-align">燈雨巷秋</li>
-					<li {% if title == 'Home' %} class="active" {% endif%}>
-						<a href="{{ url_for('home') }}">首页</a></li>
-					{% if g.user.is_authenticated %}
-					<li {% if title == '新文章' %} class="active" {% endif%}>
-						<a href="{{url_for('write')}}">发布文章</a>
-					</li>
-					<li {% if title == 'Posts' %} class="active" {% endif%}>
-						<a href="{{url_for('posts',page=1)}}">个人主页</a>
-					</li>
-					{% else %}
-					<li {% if title == 'Login' %} class="active" {% endif%}>
-						<a href="{{ url_for('login') }}">登录</a>
-					</li>
-					<li {% if title == 'Register' %} class="active" {% endif%}>
-						<a href="{{ url_for('register') }}">注册</a>
-					</li>
-					{% endif %}
-
-				</ul>
-			</div>
-		</nav>
-	</header>
-
+	{% block header %}
+		{% include 'header.html' %}
+	{% endblock %}
 
 	<main class="container">
 		{% block content %}{% endblock %}
 	</main>
 
-	<footer class="page-footer blue lighten-1">
-		<div class="container">
-			<div class="row">
-				<div class="col l6 s12">
-					<h5 class="white-text">H</h5>
-					<p class="grey-text text-lighten-4">你可以用行和列来组织你的页脚内容。</p>
-				</div>
-				<div class="col l4 offset-l2 s12">
-					<h5 class="white-text">燈雨巷秋</h5>
-					<ul>
-						<li><a class="grey-text text-lighten-3" href="#!">燈雨巷秋</a></li>
-						<li><a class="grey-text text-lighten-3" href="#!">燈雨巷秋</a></li>
-						<li><a class="grey-text text-lighten-3" href="#!">燈雨巷秋</a></li>
-						<li><a class="grey-text text-lighten-3" href="#!">燈雨巷秋</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="footer-copyright">
-			<div class="container">
-				© {{year}} Copyright 燈雨巷秋
-				<a class="grey-text text-lighten-4 right" href="#!">更多链接</a>
-			</div>
-		</div>
-	</footer>
+	{% block footer %}
+		{% include 'footer.html' %}
+	{% endblock %}
+
 
 	<!--Import jQuery before materialize.js-->
 	<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 	<script src="{{ url_for('static',filename='js/materialize.min.js') }}"></script>
-	{% block script %} {% endblock %}
+
 	<script>
 		$(document).ready(function () {
 			$(".button-collapse").sideNav();
 		})
 	</script>
+	{% block script %} {% endblock %}
 	{% for message in get_flashed_messages() %}
 		<script>
 			Materialize.toast("{{message}}", 3000, 'rounded')

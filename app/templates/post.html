@@ -1,20 +1,17 @@
 <li class="collection-item avatar">
-    <img src="{{post.post_username.user_img}}" alt="{{post.post_username.username}}" class="circle">
+    <img src="{{post.post_user.avatar}}" alt="{{post.post_user.name}}" class="circle">
     <span class="title">{{ post.title }}</span>
-    <p>{{post.post_username.username}}-{{ post.timestamp}}</p>
+    <p>{{post.post_user.name}}-{{ post.time}}</p>
     {% if title == 'Posts' %}
         <li class="edit">
-            <a type="button" href="{{url_for('updata',post_page=posts.page,post_title=post.title)}}">
+            <a type="button" href="{{url_for('post.updata',post_page=posts.page,post_title=post.title)}}">
                 修改
             </a>
         </li>
         <li class="delete">
-            <a type="button" href="{{url_for('delete',post_page=posts.page,post_title=post.title)}}">
-                删除
-            </a>
         </li>
     {% endif %}
-    <a href="{{ url_for('detail',post_id=post.id)}}" class="secondary-content">
+    <a href="{{ url_for('main.post',id=post.id)}}" class="secondary-content">
         <i class="material-icons">read_more</i>
     </a>
 </li>

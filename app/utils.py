@@ -1,38 +1,36 @@
-from App import app,serializer,admin_auth,user_auth,photos,photos_upload,videos,videos_upload
 import os
-from flask import g
-from flask_restful import abort
-from App.models import User,Admin
 from PIL import Image
+from App import UPLOAD_PHOTOS,photos
 
-#上传
+# 上传
 def upload_img(user_img,before,not_s=False):
-    #获取后缀
+    # 获取后缀
     img = user_img
     shuffix = img.filename.split('.')[-1]
     # 获取唯一文件名
     while True:
-        #转换图片名称
-        newfileName = 'image_'+new_name(shuffix)#图片image路径
-        path = os.path.join(photos_upload,newfileName)
+        # 转换图片名称
+        newfileName = 'image_'+new_name(shuffix)
+        # 图片image路径
+        path = os.path.join(UPLOAD_PHOTOS,newfileName)
         if not os.path.exists(path):
             break
-    #压缩图片
+    # 压缩图片
     photos.save(img,name=newfileName)
     if not not_s:
         s_img_url = img_zoom(path,'s_')
-        #拿到压缩图片url
+        # 拿到压缩图片url
         img_url = photos.url('s_'+newfileName)
-        #删除未压缩的图片
+        # 删除未压缩的图片
         try:
             if before:
-                delete_file(before,photos_upload)
+                delete_file(before,UPLOAD_PHOTOS)
             os.remove(path)
         except:
             os.remove(s_img_url)
             os.remove(path)
             print(path)
-            abort(500,message='删除失败')
+            raise OSError('删除失败')
         return img_url
     else:
         try:
@@ -41,10 +39,10 @@ def upload_img(user_img,before,not_s=False):
             os.remove(s_img_url)
             os.remove(path)
             print(path)
-            abort(500,message='删除失败')
+            raise OSError('删除失败')
         return img_url
 
-#生成随机名称
+# 生成随机名称
 def new_name(shuffix,length=32):
     import string,random
     Str = string.ascii_letters+string.digits
@@ -52,7 +50,7 @@ def new_name(shuffix,length=32):
     return newname+'.'+shuffix
 
 
-#缩放图片
+# 缩放图片
 def img_zoom(path,perfix,width=200,height=200):
     img = Image.open(path)
     img.thumbnail((width,height))
@@ -61,7 +59,7 @@ def img_zoom(path,perfix,width=200,height=200):
     img.save(path)
     return path
 
-#删除文件
+# 删除文件
 def delete_file(file_url,file_type):
     if file_url and file_type:
         before_filename = file_url.split('/')[-1]
