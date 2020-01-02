@@ -17,12 +17,18 @@
         {% endif %}
         <!-- pagination -->
         <div class="center">
-            {{ render_pagination(posts,'home') }}
+            {{ render_pagination(posts,'main.home') }}
         </div>
     </div>
 
     <div class="col s12 m4 l3">
-        
+        <div class="card-panel center">
+            <div>
+                <a class="btn btn-large halfway-fab waves-effect waves-light" href="{{url_for('post.new')}}">
+                    发布新记录
+                </a>
+            </div>
+        </div>
     </div>
 
 </div>

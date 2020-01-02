@@ -16,7 +16,7 @@ app.config.from_object(Config)
 # 登录模块初始化
 login = LoginManager(app)
 # 登录限制
-login.login_view = 'login'
+login.login_view = 'main.login'
 
 
 # 富文本ckeditor
@@ -34,7 +34,7 @@ patch_request_class(app,size=None)
 
 
 #分页初始化
-PAGESIZE = 6
+PAGESIZE = 2
 
 #上传保存地址
 UPLOAD_PATH = app.config['UPLOADED_PATH']

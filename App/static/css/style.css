@@ -7,17 +7,97 @@ body {
 main {
     flex: 1 0 auto;
 }
-.box{
+
+.box {
     display: flex;
 }
-.user{
+
+.user {
     justify-content: space-around;
     align-items: center;
 }
-.user img{
+
+.user img {
     height: 40px;
 }
 
-.error{
+.error {
     color: crimson;
+}
+
+.post-user {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: #fff 2px solid;
+    justify-content: start;
+    align-items: center;
+}
+
+.post-img {
+    max-width: 150px !important;
+    height: 100%;
+}
+
+.post-title {
+    position: relative;
+    top: 10px;
+    left: 35px;
+}
+
+.post-info {
+    display: inline-flex;
+    align-items: center;
+}
+.post-action{
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px !important;
+}
+.read-more{
+    position: relative;
+    padding: 5px 20px;
+    border: 1px solid;
+}
+.icon-info {
+    display: inline-flex;
+    margin: 0 5px;
+}
+.user_img{
+    max-width: 50%;
+}
+
+.WriteCover-wrapper {
+	background: #f6f6f6;
+	line-height: 150px;
+	color: grey;
+	height: 150px;
+    text-align: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	position: relative;
+}
+.UploadPicture-input {
+	display: none;
+}
+.UploadPicture-wrapper{
+    display: block;
+}
+
+.sub-btn{
+    margin-bottom: 20px;
+}
+.post-detail{
+    padding: 1.5rem;
+}
+.post-detail h2{
+    border-left: #eee 3px solid;
+    text-align: left;
+    font-size:24px;
+    padding: 20px;
+}
+
+.post-detail header img{
+    height: 400px;
 }

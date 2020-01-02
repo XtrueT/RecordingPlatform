@@ -4,9 +4,12 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	{% block title %}
-		<title> {{ title }} -- 迹 </title>
-	{% endblock %}
+	<title>
+		{% block title %}
+			{{ title }} 
+		{% endblock %}
+		-迹 
+	</title>
 	<!--Import Google Icon Font-->
 	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!--Import materialize.css-->
@@ -43,6 +46,62 @@
 			Materialize.toast("{{message}}", 3000, 'rounded')
 		</script>
 	{%endfor%}
+	<script>
+		window.onload = function () {
+			var obtn = document.getElementById("backTopBtn");
+			//文档高度
+			var client_height;
+			var time = null;
+			var isTop = true,cancelScroll = false;
+	
+			// document.compatMode
+			// BackCompat：标准兼容模式关闭。浏览器高宽度:document.body.clientWidth；
+	
+			// CSS1Compat：标准兼容模式开启。 浏览器高宽度:document.documentElement.clientWidth
+			if (document.compatMode == "CSS1Compat"){
+				client_height = document.documentElement.clientHeight;
+			} else {
+				client_height = document.body.clientHeight;
+			}
+	
+			
+			window.onscroll = function () {
+				// 已被滚动卷去的上方像素
+				var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+				// console.log(osTop);
+				if (osTop >= client_height) {
+					obtn.style.display = 'block';
+	
+					//距离顶部百分比 
+					//obtn.innerText = `Top${((osTop) /(document.body.scrollHeight-client_height) *100).toFixed(1)}%`;
+				} else {
+					obtn.style.display = 'none';
+				}
+				if (!isTop) {
+					clearInterval(time);
+				}
+				isTop = false;
+			}
+	
+			obtn.onclick = function () {
+				//点击事件
+				if (cancelScroll == false) {
+					time = setInterval(function () {
+						var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+						var ispeed = Math.floor(-osTop / 10);
+						document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
+						isTop = true;
+						if (osTop == 0) {
+							clearInterval(time);
+						}
+					}, 30);
+				} else {
+					clearInterval(time);
+					cancelScroll = true;
+				}
+			}
+		}
+	</script>
 </body>
 
 </html>

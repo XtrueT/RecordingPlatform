@@ -28,11 +28,13 @@ def new():
             db.session.add(post)
             db.session.commit()
             flash("成功")
+            return redirect(url_for('main.home'))
         except:
             flash('Error')
             db.session.rollback()
     return render_template(
         'add_post.html',
+        title='新动态',
         form=form,
         year=datetime.now().year
     )

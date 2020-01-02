@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+	{{ post.title }}
+{% endblock %}
+{% block content %}
+<div class="row card post-detail">
+	<header >
+		<h2>{{ post.title }}</h2>
+		<div>
+			<img src="{{post.post_img}}" class="responsive-img"/>
+			<p>
+				<span>{{post.time}}</span>
+				<br>
+				<span>{{post.address}}</span>
+			</p>
+		</div>
+	</header>
+	<section>
+		<h2>看法--by<span>{{post.post_user.name}}</span></h2>
+		{{ post.content | safe }}
+	</section>
+	<section>
+		<h2>相关文章</h2>
+	</section>
+	<section>
+		<h2>评论</h2>
+	</section>
+</div>
+{% endblock %}

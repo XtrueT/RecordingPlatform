@@ -24,7 +24,7 @@ def home(page=1):
 
 @main.route('/posts/<int:id>')
 def post(id):
-    post = Post.query.get(id=id)
+    post = Post.query.get(id)
     articles = Article.query.filter_by(post_id=id).order_by(db.desc(Article.time)).limit(5).all()
     return render_template(
         'post_detail.html',
@@ -36,7 +36,7 @@ def post(id):
 
 @main.route('/articles/<int:id>')
 def article(id):
-    article = Article.query.get(id=id)
+    article = Article.query.get(id)
     return render_template(
         'article_detail.html',
         article = article,

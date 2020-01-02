@@ -1,17 +1,28 @@
-<li class="collection-item avatar">
-    <img src="{{post.post_user.avatar}}" alt="{{post.post_user.name}}" class="circle">
-    <span class="title">{{ post.title }}</span>
-    <p>{{post.post_user.name}}-{{ post.time}}</p>
-    {% if title == 'Posts' %}
-        <li class="edit">
-            <a type="button" href="{{url_for('post.updata',post_page=posts.page,post_title=post.title)}}">
-                修改
-            </a>
-        </li>
-        <li class="delete">
-        </li>
-    {% endif %}
-    <a href="{{ url_for('main.post',id=post.id)}}" class="secondary-content">
-        <i class="material-icons">read_more</i>
-    </a>
+<li class="collection-item">
+    <div class="card horizontal">
+        <div class="card-image">
+            <img class="post-img" src="{{post.post_img}}" alt="{{ post.title }}">
+        </div>
+        <div class="card-stacked">
+            <span class="card-title post-title">{{ post.title }}</span>
+            <div class="card-content">
+                <p>{{post.content}}</p>
+            </div>
+            <div class="card-action box post-action">
+                <span class="post-info">
+                    <span class=" icon-info user">
+                        <img src="{{post.post_user.avatar}}" alt="{{post.post_user.name}}"
+                            class="circle">{{post.post_user.name}}
+                    </span>
+                    <span class="tooltipped icon-info" data-position="right" data-delay="50"
+                        data-tooltip="{{post.time.strftime("%Y-%m-%d")}}">
+                        <i class="material-icons">navigation</i>{{ post.address}}
+                    </span>
+                </span>
+                <a href="{{ url_for('main.post',id=post.id)}}" class="read-more icon-info">
+                    更多
+                </a>
+            </div>
+        </div>
+    </div>
 </li>
