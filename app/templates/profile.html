@@ -1,61 +1,168 @@
 {% extends "layout.html" %}
-
+{% from 'function.html' import render_pagination %}
 {% block content %}
 <div class="row">
+
 	<div class="col s12 m8 l8">
-		<div class="card">
-			<div class="card-content w100dt">
-				<span class="card-title">
-					修改信息
-				</span>
-				<form method="POST">
-					<!-- #实现在配置中激活的csrf保护 -->
-					{{ form.csrf_token }}
-					<br>
-					{{form.username.label}}
-					{{form.username()}}
-					<br>
-					{{ form.email.label}}
-					{{ form.email()}}
-					<br>
-					{% for error in form.email.errors %}
-					<span class="error">{{error}}</span>
-					{% endfor %}
-					<br>
-					{{form.submit()}}
-				</form>
+		<div class="row card">
+			<div class="col s12">
+				<ul class="tabs">
+					<li class="tab col s3"><a href="#my-posts">动态</a></li>
+					<li class="tab col s3"><a href="#my-articles">我的文章</a></li>
+					<li class="tab col s3"><a href="#my-comments">我的评论</a></li>
+				</ul>
 			</div>
-		</div>
-		<div class="card">
-			<div class="card-content w100dt">
-				<span class="card-title">
-					修改头像
-				</span>
-				<div class="row">
-					<div class="col m6 s12">
-						<form action="{{url_for('main.avatar')}}" method="POST" enctype="multipart/form-data">
-							<!-- #实现在配置中激活的csrf保护 -->
-							{{ img_form.csrf_token }}
-							<p>
-								{{ img_form.upload_photo(onchange="getPhoto(this)")}}
-							</p>
-							{% for error in img_form.upload_photo.errors %}
-							<span class="error">{{ error }}</span>
-							{% endfor %}
-							<P>
-								{{ img_form.submit }}
-							</P>
-						</form>
-					</div>
-					<div class="col m6 s12">
-						<div id="img">
-							<img id="img_view" src="" />
-						</div>
-					</div>
+			<div id="my-posts" class="col s12">
+				<!-- posts -->
+				{% if posts.items %}
+
+				<ul class="collection">
+					{% for post in posts.items %}
+					{% include 'post.html' %}
+					{% endfor %}
+				</ul>
+				{% else %}
+				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% endif %}
+				<!-- pagination -->
+				<div class="center">
+					{{ render_pagination(posts,'main.profile') }}
 				</div>
+			</div>			
+			<div id="my-articles" class="col s12">
+
+				{% if current_user.articles %}
+
+				<ul class="collection">
+					{% for item in current_user.articles %}
+						<li class="collection-item">{{item.title}}-{{item.time.strftime("%Y-%m-%d")}}</li>
+					{% endfor %}
+				</ul>
+				{% else %}
+				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% endif %}
+			</div>			
+			<div id="my-comments" class="col s12">
+
+				{% if current_user.comments %}
+
+				<ul class="collection">
+					{% for item in current_user.comments %}
+						<li class="collection-item">{{item.content}}-{{item.time.strftime("%Y-%m-%d")}}</li>
+					{% endfor %}
+				</ul>
+				{% else %}
+				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% endif %}
 			</div>
 		</div>
 	</div>
+
+	<div class="col s12 m4 l4">
+		<div class="card user-view blue aghten-1">
+			<div class="box user">
+				<a href="#modal2">
+					<img src="{{current_user.avatar}}" class="circle responsive-img avatar"
+						alt="{{current_user.name}}" />
+				</a>
+				<span>{{current_user.name}}</span>
+				<!-- Modal Trigger -->
+				<a class="waves-effect waves-aght btn modal-trigger" href="#modal1">编辑资料</a>
+			</div>
+		</div>
+		<div class="card">
+			<ul class="collection">
+				<a href="{{url_for('post.new')}}" class="collection-item">
+					<span class="icon-info">
+						<i class="material-icons ">add</i>
+							新动态
+					</span>
+				</a>				
+				<a class="collection-item">
+					<span class="icon-info">
+						<i class="material-icons ">edit</i>
+							管理我的动态
+					</span>
+				</a>				
+				<a class="collection-item">
+					<span class="icon-info">
+						<i class="material-icons ">edit</i>
+							管理我的文章
+					</span>
+				</a>
+				<a class="collection-item">
+					<span class="icon-info">
+						<i class="material-icons ">edit</i>
+							管理我的评论
+					</span>
+				</a>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Modal Structure -->
+	<div id="modal1" class="modal">
+		<div class="modal-content">
+			<h4>编辑资料</h4>
+			<form class="form" method="POST">
+				<!-- #实现在配置中激活的csrf保护 -->
+				{{ form.hidden_tag() }}
+				<div class="input-field">
+					{{ form.username(class="vaadate") }}
+					{{ form.username.label }}
+					{% for error in form.username.errors %}
+					<span style="color: crimson;">{{error}}</span>
+					{% endfor %}
+				</div>
+				<div class="input-field">
+					{{ form.email(class="vaadate") }}
+					{{ form.email.label }}
+					{% for error in form.email.errors %}
+					<span style="color: crimson;">{{error}}</span>
+					{% endfor %}
+				</div>
+				<div class="modal-footer">
+					{{form.submit(class="btn waves-effect waves-aght")}}
+					<a href="#!" class="modal-close waves-effect waves-green btn-flat">
+						取消
+					</a>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div id="modal2" class="modal">
+		<div class="modal-content">
+			<h4>上传头像</h4>
+			<form action="{{url_for('main.avatar')}}" method="POST" enctype="multipart/form-data">
+				<!-- #实现在配置中激活的csrf保护 -->
+				{{ img_form.hidden_tag() }}
+				<div class="row">
+					<div class="WriteCover-wrapper left" style="width: 50%;">
+						<label class="UploadPicture-wrapper">
+							{{ img_form.upload_photo( class="UploadPicture-input",onchange="getPhoto(this)", accept=".jpeg, .jpg, .png" ) }}
+							<span>头像</span>
+						</label>
+						{% for error in img_form.upload_photo.errors %}
+						<span style="color: crimson;">{{error}}</span>
+						{% endfor %}
+					</div>
+					<div class="file-path-wrapper right" style="width: 50%;">
+						<img id="img_view" src="" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="modal-footer">
+						{{img_form.submit(class="btn waves-effect waves-aght")}}
+						<a href="#!" class="modal-close waves-effect waves-green btn-flat">
+							取消
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
 </div>
 {% endblock %}
 {% block script %}

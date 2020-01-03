@@ -9,6 +9,16 @@ from ..forms import PostForm
 from ..utils import upload_img
 from . import post
 
+@post.route('/<int:id>')
+def posts(id):
+    post = Post.query.get(id)
+    articles = Article.query.filter_by(post_id=id).order_by(db.desc(Article.time)).limit(5).all()
+    return render_template(
+        'post_detail.html',
+        post = post,
+        articles = articles,
+        year = datetime.now().year
+    )
 
 
 @post.route('/new',methods=['GET','POST'])
@@ -73,6 +83,7 @@ def update(id):
             except:
                 flash('Error')
                 db.session.rollback()
+            return redirect(url_for('post.posts',id=post.id))
         else:
             form.title.data = post.title
             form.content.data = post.content

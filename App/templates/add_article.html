@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col s12 m12 l12 card">
+            <div class="center">
+                <h2>{{ title }}</h2>
+            </div>
+            <form class="form" method="POST">
+                <!-- #实现在配置中激活的csrf保护 -->
+                {{ form.hidden_tag() }}
+
+                <div class="input-field">
+                    {{ form.title( class="validate" ) }}
+                    {{ form.title.label }}
+                    {% for error in form.title.errors %}
+                    <span style="color: crimson;">{{error}}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="input-field">
+                    {{ form.content(class="materialize-textarea",length="900") }}
+                    {{ form.content.label }}
+                    {% for error in form.content.errors %}
+                    <span style="color: crimson;">{{error}}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="input-field center sub-btn" >
+                    {{form.submit(class="btn waves-effect waves-light")}}
+                </div>
+
+            </form>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block script %}
+{{ super() }}
+<!-- 加载ckeditor的js等模块 -->
+{{ckeditor.load()}}
+{{ ckeditor.load_code_theme() }}
+{{ckeditor.config(name='content')}}
+{% endblock %}

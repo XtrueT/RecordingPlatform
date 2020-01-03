@@ -14,42 +14,12 @@ from . import main
 @main.route('/home/<int:page>')
 def home(page=1):
     posts = Post.query.order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
+    articles = Article.query.order_by(db.desc(Article.time)).limit(5).all()
     return render_template(
         'index.html',
         title='Home',
         posts=posts,
-        year = datetime.now().year
-    )
-
-
-@main.route('/posts/<int:id>')
-def post(id):
-    post = Post.query.get(id)
-    articles = Article.query.filter_by(post_id=id).order_by(db.desc(Article.time)).limit(5).all()
-    return render_template(
-        'post_detail.html',
-        post = post,
-        articles = articles,
-        year = datetime.now().year
-    )
-
-
-@main.route('/articles/<int:id>')
-def article(id):
-    article = Article.query.get(id)
-    return render_template(
-        'article_detail.html',
-        article = article,
-        year = datetime.now().year
-    )
-
-
-@main.route('/articles/<int:post_id>')
-def articles(post_id,page=1):
-    articles = Article.query.filter_by(post_id=post_id).order_by(db.desc(Article.time)).paginate(page,PAGESIZE,False)
-    return render_template(
-        'articles.html',
-        article = article,
+        articles=articles,
         year = datetime.now().year
     )
 
@@ -129,8 +99,9 @@ def logout():
 
 
 @main.route('/profile',methods=['GET','POST'])
+@main.route('/profile/<int:page>',methods=['GET','POST'])
 @login_required
-def profile():
+def profile(page=1):
     form = ProfileForm()
     img_form = UploadForm()
     if form.validate_on_submit():
@@ -145,11 +116,13 @@ def profile():
     else:
         form.username.data = current_user.name
         form.email.data = current_user.email
+        user_posts = Post.query.filter_by(user_id=current_user.id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
     return render_template(
         'profile.html',
         title='Profile',
         form=form,
         img_form=img_form,
+        posts=user_posts,
         year=datetime.now().year
     )
 

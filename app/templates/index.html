@@ -2,18 +2,56 @@
 {% from 'function.html' import render_pagination %}
 {% block content %}
 <div class="row">
-
     <div class="col s12 m8 l9">
+
+        <div class="carousel carousel-slider center" data-indicators="true">
+            <div class="carousel-fixed-item center">
+                <a class="btn waves-effect white grey-text darken-text-2">按钮</a>
+            </div>
+
+
+            <!-- <div class="card">
+                <div class="collection"> -->
+                    {% for article in articles %}
+                    <div class="carousel-item red white-text" href="#one!">
+                        <a href="{{url_for('article.articles',id=article.id)}}" class="collection-item">
+                            <div class="black-text">
+                                <div class="card-footer">
+                                    <span class="post-info">
+                                        <span class=" icon-info user">
+                                            <img src="{{article.article_user.avatar}}" alt="{{article.article_user.name}}"
+                                                class="circle">{{article.article_user.name}}
+                                        </span>
+                                        <span class="icon-info">
+                                            <i class="material-icons">access_time</i>
+                                            {{article.time.strftime("%Y-%m-%d")}}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="card-title post-title">
+                                    {{article.title}}
+                                </div>
+                                <div class="card-content">
+                                    {{article.content | truncate(100,True) |safe }}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                <!-- </div>
+            </div> -->
+        </div>
+
         <!-- posts -->
         {% if posts.items %}
 
         <ul class="collection">
             {% for post in posts.items %}
-                {% include 'post.html' %} 
+            {% include 'post.html' %}
             {% endfor %}
         </ul>
         {% else %}
-            <p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+        <p>你什么都没有ヾ(≧O≦)〃嗷~</p>
         {% endif %}
         <!-- pagination -->
         <div class="center">
@@ -22,12 +60,24 @@
     </div>
 
     <div class="col s12 m4 l3">
-        <div class="card-panel center">
-            <div>
-                <a class="btn btn-large halfway-fab waves-effect waves-light" href="{{url_for('post.new')}}">
-                    发布新记录
+        <div class="card">
+            <ul class="collection">
+                <a href="{{url_for('post.new')}}" class="collection-item">
+                    {% if g.user.is_authenticated %}
+                    <span class="icon-info">
+                        <i class="material-icons ">add</i>
+                        发布
+                    </span>
                 </a>
-            </div>
+                {% else %}
+                <a href="{{url_for('main.login')}}" class="collection-item">
+                    <span class="icon-info">
+                        <i class="material-icons">add</i>
+                        登录可发布
+                    </span>
+                    {% endif %}
+                </a>
+            </ul>
         </div>
     </div>
 

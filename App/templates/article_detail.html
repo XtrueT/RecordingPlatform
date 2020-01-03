@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block title %}
+{{ article.title }}
+{% endblock %}
+{% block content %}
+<div class="row card article-detail">
+    <header>
+        <div>
+            <h2>
+                {{ article.title }}
+            </h2>
+            <p class="box">
+                <span class="box">
+                    <img src="{{article.article_user.avatar}}" class="circle avatar post-user-img"
+                        alt="{{article.article_user.name}}" />
+                    {{article.article_user.name}}
+                </span>
+                <span class="icon-info">
+                    <i class="material-icons">access_time</i>
+                    {{article.time.strftime("%Y-%m-%d")}}
+                </span>
+                <span class="icon-info">
+                    <i class="material-icons">attachment</i>
+                    <a href="{{url_for('post.posts',id=article.post_id)}}">{{ article.article_post.title}}</a>
+                </span>
+            </p>
+        </div>
+    </header>
+	<article class="post-content">
+		{{ article.content | safe }}
+	</article>
+	<section>
+		<h2>相关评论
+			<a class="right" href="{{url_for('article.new',post_id=article.article_post.id)}}">写评论</a>
+		</h2>
+		<div class="collection">
+			{% for comment in article.comments %}
+			<li class="collection-item">
+				<div class="black-text">
+					<div class="card-footer">
+						<span class="post-info">
+							<span class=" icon-info user">
+								<img src="{{comment.comment_user.avatar}}" alt="{{comment.comment_user.name}}"
+									class="circle">{{comment.comment_user.name}}
+							</span>
+							<span class="icon-info">
+								<i class="material-icons">access_time</i>
+								{{comment.time.strftime("%Y-%m-%d")}}
+							</span>
+						</span>
+					</div>
+					<div class="card-title post-title">
+						{{comment.title}}
+					</div>
+					<div class="card-content">
+						{{comment.content}}
+                    </div>
+                    <div>
+                        <a href="#">回复</a>
+                    </div>
+				</div>
+			</li>
+			{% endfor %}
+		</div>
+	</section>
+</div>
+{% endblock %}

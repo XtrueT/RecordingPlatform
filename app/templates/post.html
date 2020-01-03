@@ -16,10 +16,10 @@
                     </span>
                     <span class="tooltipped icon-info" data-position="right" data-delay="50"
                         data-tooltip="{{post.time.strftime("%Y-%m-%d")}}">
-                        <i class="material-icons">navigation</i>{{ post.address}}
+                        <i class="material-icons">place</i>{{ post.address}}
                     </span>
                 </span>
-                <a href="{{ url_for('main.post',id=post.id)}}" class="read-more icon-info">
+                <a href="{{ url_for('post.posts',id=post.id)}}" class="read-more icon-info">
                     更多
                 </a>
             </div>

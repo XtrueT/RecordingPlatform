@@ -1,29 +1,72 @@
 {% extends "layout.html" %}
 {% block title %}
-	{{ post.title }}
+{{ post.title }}
 {% endblock %}
 {% block content %}
 <div class="row card post-detail">
-	<header >
+	<header>
 		<h2>{{ post.title }}</h2>
-		<div>
-			<img src="{{post.post_img}}" class="responsive-img"/>
-			<p>
-				<span>{{post.time}}</span>
-				<br>
-				<span>{{post.address}}</span>
-			</p>
+		<div class="post-header box">
+			<img src="{{post.post_img}}" class="responsive-img" />
+			<div>
+				<p>
+					<span class="icon-info">
+						<i class="material-icons">access_time</i>
+						{{post.time.strftime("%Y-%m-%d")}}
+					</span>
+				</p>
+				<p>
+					<span class="icon-info">
+						<i class="material-icons">place</i>
+						{{ post.address}}
+					</span>
+				</p>
+			</div>
 		</div>
 	</header>
 	<section>
-		<h2>看法--by<span>{{post.post_user.name}}</span></h2>
-		{{ post.content | safe }}
+		<h2>
+			<span class="box">
+				<img src="{{post.post_user.avatar}}" class="circle avatar post-user-img"
+					alt="{{post.post_user.name}}" />
+				{{post.post_user.name}}
+			</span>
+		</h2>
+		<article class="post-content">
+			{{ post.content | safe }}
+		</article>
 	</section>
 	<section>
-		<h2>相关文章</h2>
-	</section>
-	<section>
-		<h2>评论</h2>
+		<h2>
+			相关文章
+			<a class="right" href="{{url_for('article.new',post_id=post.id)}}">写文章</a>
+		</h2>
+		<div class="collection">
+			{% for article in articles %}
+			<a href="{{url_for('article.articles',id=article.id)}}" class="collection-item">
+				<div class="black-text">
+					<div class="card-footer">
+						<span class="post-info">
+							<span class=" icon-info user">
+								<img src="{{article.article_user.avatar}}" alt="{{article.article_user.name}}"
+									class="circle">{{article.article_user.name}}
+							</span>
+							<span class="icon-info">
+								<i class="material-icons">access_time</i>
+								{{article.time.strftime("%Y-%m-%d")}}
+							</span>
+						</span>
+					</div>
+					<div class="card-title post-title">
+						{{article.title}}
+					</div>
+					<div class="card-content">
+						{{article.content | truncate(100,True) |safe }}
+					</div>
+				</div>
+			</a>
+			{% endfor %}
+		</div>
 	</section>
 </div>
 {% endblock %}
