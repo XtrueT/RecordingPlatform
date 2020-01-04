@@ -21,6 +21,17 @@ def posts(id):
     )
 
 
+@post.route('/of_users/<int:page>')
+@login_required
+def user_posts(page=1):
+    user_posts = Post.query.filter_by(user_id=current_user.id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
+    return render_template(
+        'user_posts.html',
+        title='UserPost',
+        posts=user_posts
+    )
+
+
 @post.route('/new',methods=['GET','POST'])
 @login_required
 def new():
@@ -62,6 +73,7 @@ def remove(id):
         except:
             flash('Error')
             db.session.rollback()
+    return redirect(url_for('post.user_posts'))
 
 
 @post.route('/update/<int:id>',methods=['GET','PUT'])

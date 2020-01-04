@@ -19,9 +19,22 @@ def articles(id):
     )
 
 
-@article.route('/of_posts/<int:post_id>')
+@article.route('/of_posts')
+@article.route('/of_posts/<int:post_id>/<int:page>')
 def post_articles(post_id,page=1):
     articles = Article.query.filter_by(post_id=post_id).order_by(db.desc(Article.time)).paginate(page,PAGESIZE,False)
+    return render_template(
+        'articles.html',
+        article = article,
+        year = datetime.now().year
+    )
+
+
+@article.route('/of_users')
+@article.route('/of_users/<int:user_id>/<int:page>')
+@login_required
+def user_articles(user_id,page=1):
+    articles = Article.query.filter_by(user_id=user_id).order_by(db.desc(Article.time)).paginate(page,PAGESIZE,False)
     return render_template(
         'articles.html',
         article = article,
@@ -45,7 +58,6 @@ def new(post_id):
             db.session.add(article)
             # 返回新建的id
             db.session.flush()
-            print(article.id)
             db.session.commit()
         except:
             flash('新建失败')
@@ -58,6 +70,47 @@ def new(post_id):
         form = form,
         year=datetime.now().year
     )
+
+
+@article.route('/new/<int:id>',methods=['GET','POST'])
+@login_required
+def update(id):
+    form = WriteForm ()
+    if form.validate_on_submit():
+        article = Article.query.get(id)
+        try:
+            article.title = form.title.data
+            article.content = form.content.data
+            article.time = datetime.now()
+            db.session.commit()
+        except:
+            flash('失败')
+            return redirect(url_for('article.new',post_id=post_id))
+        flash("成功")
+        return redirect(url_for('article.articles',id=article.id))
+    form.title.data = article.title 
+    form.content.data = article.content
+    return render_template(
+        'add_article.html',
+        title = '修改文章',
+        form = form,
+        year=datetime.now().year
+    )
+
+
+@article.route('/<int:id>',methods=['DELETE'])
+@login_required
+def remove(id):
+    article = Article.query.get(id)
+    if article:
+        try:
+            db.session.delete(article)
+            db.session.commit()
+            flash("成功")
+        except:
+            flash('Error')
+            db.session.rollback()
+    return redirect(url_for('article.user_articles'))
 
 
 #开始上传,获取上传文件的url
