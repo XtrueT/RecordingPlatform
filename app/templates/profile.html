@@ -35,7 +35,12 @@
 
 				<ul class="collection">
 					{% for item in current_user.articles %}
-						<li class="collection-item">{{item.title}}-{{item.time.strftime("%Y-%m-%d")}}</li>
+						<a href="{{url_for('article.articles',id=item.id)}}" class="collection-item" title=" {{item.title}}">
+                            {{item.title}}
+                            <span class="right">
+                                {{item.time.strftime("%Y-%m-%d")}}
+                            </span>
+                        </a>
 					{% endfor %}
 				</ul>
 				{% else %}
@@ -45,11 +50,20 @@
 			<div id="my-comments" class="col s12">
 
 				{% if current_user.comments %}
-
 				<ul class="collection">
 					{% for item in current_user.comments %}
-						<li class="collection-item">{{item.content}}-{{item.time.strftime("%Y-%m-%d")}}</li>
+						<li class="collection-item">
+							<span class="icon-info">
+								<i class="material-icons">attachment</i>
+								<a href="{{url_for('article.articles',id=item.comment_article.id)}}">{{ item.comment_article.title}}</a>
+							</span>
+							<p>
+								<span>{{item.content}}</span>
+								<span class="text-muted right">{{item.time.strftime("%Y-%m-%d")}}</span>
+							</p>
+						</li>
 					{% endfor %}
+					
 				</ul>
 				{% else %}
 				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
@@ -65,7 +79,6 @@
 					<img src="{{current_user.avatar}}" class="circle responsive-img avatar"
 						alt="{{current_user.name}}" />
 				</a>
-				<span>{{current_user.name}}</span>
 				<!-- Modal Trigger -->
 				<a class="waves-effect waves-aght btn modal-trigger" href="#modal1">编辑资料</a>
 			</div>

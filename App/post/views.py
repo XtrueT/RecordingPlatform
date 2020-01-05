@@ -20,15 +20,15 @@ def posts(id):
         year = datetime.now().year
     )
 
-
-@post.route('/of_users/<int:page>')
-@login_required
-def user_posts(page=1):
-    user_posts = Post.query.filter_by(user_id=current_user.id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
+@post.route('/of_users/<int:id>')
+@post.route('/of_users/<int:id>/<int:page>')
+def user_posts(id,page=1):
+    user_posts = Post.query.filter_by(user_id=id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
+    user = User.query.get(id)
     return render_template(
         'user_posts.html',
-        title='UserPost',
-        posts=user_posts
+        posts=user_posts,
+        user=user
     )
 
 

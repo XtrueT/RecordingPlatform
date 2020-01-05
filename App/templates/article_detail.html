@@ -31,8 +31,30 @@
 	</article>
 	<section>
 		<h2>相关评论
-			<a class="right" href="{{url_for('article.new',post_id=article.article_post.id)}}">写评论</a>
 		</h2>
+		{% if g.user.is_authenticated %}
+		<form class="form" method="POST" action="{{url_for('comment.new',article_id=article.id)}}" id="comm">
+            {{ form.hidden_tag() }}
+
+            <div class="input-field">
+                {{ form.content( class="materialize-textarea",length="100",id="comm_input") }}
+                {{ form.content.label }}
+                {% for error in form.content.errors %}
+                    <span style="color: crimson;">{{error}}</span>
+                {% endfor %}
+            </div>
+            <div class="input-field center sub-btn">
+                {{form.submit(class="btn waves-effect waves-light")}}
+            </div>
+
+		</form>
+		{% else %}
+		<div>
+			登录后可以评论<a href="/login">去登录?</a>
+		</div>
+		{% endif %}
+
+		
 		<div class="collection">
 			{% for comment in article.comments %}
 			<li class="collection-item">
@@ -49,19 +71,37 @@
 							</span>
 						</span>
 					</div>
-					<div class="card-title post-title">
-						{{comment.title}}
-					</div>
 					<div class="card-content">
+						{% if comment.comm_type == 0 %}
+							<a href="{{url_for('post.user_posts',id=comment.to_user_id)}}">@回复{{comment.title}}</a>
+						{% endif %}
 						{{comment.content}}
-                    </div>
+					</div>
+					
+					{% if g.user.is_authenticated %}
                     <div>
-                        <a href="#">回复</a>
+                        <button onclick="reply( `{{ url_for('comment.new',article_id=comment.article_id,to_user=comment.form_user_id) }}` )">回复</button>
                     </div>
+					{% else %}
+					<div>
+						登录后可以回复<a href="/login">去登录?</a>
+					</div>
+					{% endif %}
+
 				</div>
 			</li>
 			{% endfor %}
 		</div>
+
+		
 	</section>
 </div>
+{% endblock %}
+{% block script %}
+	<script>
+		function reply(href) {
+			document.getElementById("comm").action = href;
+			$('#comm_input').focus()
+		}
+	</script>	
 {% endblock %}

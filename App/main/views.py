@@ -13,13 +13,11 @@ from . import main
 @main.route('/')
 @main.route('/home/<int:page>')
 def home(page=1):
-    posts = Post.query.order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
-    articles = Article.query.order_by(db.desc(Article.time)).limit(5).all()
+    users = User.query.order_by(db.desc(User.last_seen)).paginate(page,PAGESIZE,False)
     return render_template(
         'index.html',
         title='Home',
-        posts=posts,
-        articles=articles,
+        users=users,
         year = datetime.now().year
     )
 

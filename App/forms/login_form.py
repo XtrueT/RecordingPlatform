@@ -1,7 +1,6 @@
-from . import FlaskForm
-from . import StringField,PasswordField,BooleanField,SubmitField
-from . import DataRequired,Email
-
+from flask_wtf import FlaskForm
+from wtforms import StringField,PasswordField,BooleanField,SubmitField
+from wtforms.validators import DataRequired,Email
 
 class LoginForm(FlaskForm):
     #DataRequired,没有在当前表格输入直接到下一个表格输入会提示

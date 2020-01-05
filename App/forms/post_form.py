@@ -1,6 +1,6 @@
-from . import FlaskForm
-from . import StringField,SubmitField,TextAreaField,DateField
-from . import DataRequired,Length
+from flask_wtf import FlaskForm
+from wtforms import StringField,SubmitField,TextAreaField,DateField
+from wtforms.validators import DataRequired,Length
 from flask_wtf.file import FileField,FileAllowed,FileRequired
 from App import photos
 

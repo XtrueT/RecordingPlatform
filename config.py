@@ -10,8 +10,8 @@ class Config(object):
     #设置ckeditor配置,
     # 上传
     CKEDITOR_FILE_UPLOADER ='article.upload'
-    # UPLOADED_PATH = os.path.join(BASE_DIR,'uploads')
-    UPLOADED_PATH = BASE_DIR+'/App/static/uploads/cke'
+    # UPLOADED_PATH = os.path.join(BASE_DIR)
+    UPLOADED_PATH = BASE_DIR + '\\App\\static\\uploads\\cke'
     #开启Markdown 插件默认关闭
     CKEDITOR_ENABLE_MARKDOWN = True
     #开启代码块

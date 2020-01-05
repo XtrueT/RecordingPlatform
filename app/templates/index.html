@@ -3,67 +3,62 @@
 {% block content %}
 <div class="row">
     <div class="col s12 m8 l9">
+        <!-- user-post -->
+        {% if users.items %}
 
-        <div class="carousel carousel-slider center" data-indicators="true">
-            <div class="carousel-fixed-item center">
-                <a class="btn waves-effect white grey-text darken-text-2">按钮</a>
-            </div>
-
-
-            <!-- <div class="card">
-                <div class="collection"> -->
-                    {% for article in articles %}
-                    <div class="carousel-item red white-text" href="#one!">
-                        <a href="{{url_for('article.articles',id=article.id)}}" class="collection-item">
-                            <div class="black-text">
-                                <div class="card-footer">
-                                    <span class="post-info">
-                                        <span class=" icon-info user">
-                                            <img src="{{article.article_user.avatar}}" alt="{{article.article_user.name}}"
-                                                class="circle">{{article.article_user.name}}
-                                        </span>
-                                        <span class="icon-info">
-                                            <i class="material-icons">access_time</i>
-                                            {{article.time.strftime("%Y-%m-%d")}}
-                                        </span>
-                                    </span>
-                                </div>
-                                <div class="card-title post-title">
-                                    {{article.title}}
-                                </div>
-                                <div class="card-content">
-                                    {{article.content | truncate(100,True) |safe }}
-                                </div>
-                            </div>
-                        </a>
+        <section>
+            {% for user in users.items %}
+                <div class="card horizontal">
+                    <div class="card-image">
+                        <img src="{{user.avatar}}" alt="{{user.name}}">
                     </div>
-                    {% endfor %}
-                <!-- </div>
-            </div> -->
-        </div>
+                    <div class="card-stacked">
+                        <span class="card-title post-title">{{user.name}}的观影记录</span>
+                        <div class="card-content">
+                            <p>
+                                <span class="icon-info">
+                                    <i class="material-icons">movie</i>看过{{ user.posts.count()}}部电影
+                                </span>
+                            </p>
+                            <p>
+                                <span class="icon-info">
+                                    <i class="material-icons">import_contacts</i>写过{{ user.articles.count()}}篇文章
+                                </span>
+                            </p>
 
-        <!-- posts -->
-        {% if posts.items %}
-
-        <ul class="collection">
-            {% for post in posts.items %}
-            {% include 'post.html' %}
+                        </div>
+                        <div class="card-action box post-action">
+                            <span class="post-info">
+                                <span class="icon-info">
+                                    <i class="material-icons">access_time</i>
+                                    最近活跃：{{user.last_seen.strftime("%Y-%m-%d")}}
+                                </span>
+                                <span class="icon-info">
+                                    <i class="material-icons">comment</i>{{ user.comments.count()}}
+                                </span>
+                            </span>
+                            <a href="{{url_for('post.user_posts',id=user.id)}}" class="read-more icon-info">
+                                详情
+                            </a>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </section>
         {% else %}
-        <p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+        <p>暂无用户观影记录</p>
         {% endif %}
         <!-- pagination -->
         <div class="center">
-            {{ render_pagination(posts,'main.home') }}
+            {{ render_pagination(users,'main.home') }}
         </div>
     </div>
 
     <div class="col s12 m4 l3">
         <div class="card">
             <ul class="collection">
+                {% if g.user.is_authenticated %}
                 <a href="{{url_for('post.new')}}" class="collection-item">
-                    {% if g.user.is_authenticated %}
                     <span class="icon-info">
                         <i class="material-icons ">add</i>
                         发布

@@ -1,20 +1,23 @@
 import os
 from datetime import datetime
-from flask import render_template,flash,redirect,url_for,request,g,send_from_directory
+from flask import render_template,flash,redirect,url_for,request,g,send_from_directory,current_app
 from flask_login import current_user,login_required
 from flask_ckeditor import upload_fail,upload_success
-from App import app,PAGESIZE,UPLOAD_PATH
+from App import app,PAGESIZE
 from ..models import db,Article,Comment
-from ..forms import WriteForm
+from ..forms import WriteForm,CommentForm
+from ..utils import new_name
 from . import article
 
 
 @article.route('/<int:id>')
 def articles(id):
     article = Article.query.get(id)
+    form = CommentForm()
     return render_template(
         'article_detail.html',
         article = article,
+        form=form,
         year = datetime.now().year
     )
 
@@ -116,7 +119,7 @@ def remove(id):
 #开始上传,获取上传文件的url
 @article.route('/files/<filename>')
 def uploaded_files(filename):
-    path = UPLOAD_PATH
+    path = app.config['UPLOADED_PATH']
     return send_from_directory(path,filename)
 
 
@@ -129,9 +132,26 @@ def upload():
     if extension not in ['jpg','gif','png','jpeg','md','html',]:
         flash('上传失败')
         return upload_fail(message='文件格式不正确')
-    f.save(os.path.join(UPLOAD_PATH,f.filename))
-    print(os.path.join(UPLOAD_PATH,f.filename))
-    url = url_for('article.uploaded_files',filename=f.filename)
+    filepath = os.path.join(app.config['UPLOADED_PATH'],f.filename)
+    dirname = os.path.dirname(filepath)
+    # 直接存可能会出现错误，原因是os不能
+    # 原因是os.mkdir 只能生成下一级的目录文件. 若要想生成多个子路径下的文件，需要将os.mkdir 改成 os.makedirs
+    if not os.path.exists(dirname):
+        try:
+            os.makedirs(dirname)
+        except:
+            raise OSError('create error')
+    elif not os.access(dirname, os.W_OK):
+        raise OSError('ERROR_DIR_NOT_WRITEABLE')
+    while True:
+        # 转换图片名称
+        newfileName = 'article_'+new_name(extension)
+        # 图片image路径
+        path = os.path.join(app.config['UPLOADED_PATH'] ,newfileName)
+        if not os.path.exists(path):
+            break
+    f.save(path)
+    url = url_for('article.uploaded_files',filename=newfileName)
     print(url)
     flash('上传成功')
     return upload_success(url=url)

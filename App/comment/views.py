@@ -6,34 +6,38 @@ from ..models import db,Article,Comment,User,Post
 from ..forms import CommentForm
 from . import comment
 
-@comment.route('of_articles/<int:article_id>/<int:page>')
+@comment.route('/of_articles/<int:article_id>/<int:page>')
 def article_comm():
     return  render_template(
         ' '
     )
 
 
-@comment.route('of_users/<int:user_id>/<int:page>')
+@comment.route('/of_users/<int:user_id>/<int:page>')
 @login_required
 def user_comm():
     return  render_template(
         ' '
     )
 
-
-@comment.route('of_articles/<int:article_id>/<int:page>')
+@comment.route('/of_articles/<int:article_id>/<int:to_user>',methods=['POST'])
+@comment.route('/of_articles/<int:article_id>',methods=['POST'])
 @login_required
-def new(article_id):
+def new(article_id,to_user=None):
     form = CommentForm()
     if form.validate_on_submit():
         try:
-            comm = Comment(
-                title=' ',
-                content=form.content.data,
-                time=datetime.now(),
-                form_user_id=current_user.id,
-                article_id=article_id
-            )
+            comm = Comment()
+            comm.article_id = article_id
+            comm.content = form.content.data
+            comm.form_user_id = current_user.id
+            comm.time = datetime.now()
+            if to_user:
+                user = User.query.get(to_user)
+                if user:
+                    comm.title = user.name
+                    comm.comm_type = 0
+                    comm.to_user_id = to_user
             db.session.add(comm)
             db.session.commit()
             flash("成功")

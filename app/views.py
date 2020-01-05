@@ -6,6 +6,7 @@ from .models import db,User
 from .main import main
 from .post import post
 from .article import article
+from .comment import comment
 
 
 # 从session里读取用户信息
@@ -36,4 +37,5 @@ def internal_error(e):
 
 app.register_blueprint(post,url_prefix='/posts')
 app.register_blueprint(article,url_prefix='/articles')
+app.register_blueprint(comment,url_prefix='/comments')
 app.register_blueprint(main)

@@ -1,9 +1,8 @@
 from flask import g
-from . import FlaskForm
-from . import StringField,SubmitField
-from . import DataRequired,Email,EqualTo,Length
+from flask_wtf import FlaskForm
+from wtforms import StringField,SubmitField
+from wtforms.validators import DataRequired,ValidationError,Email,Length
 from ..models import User
-
 
 class ProfileForm(FlaskForm): 
     username = StringField('用户名',validators=[DataRequired(),Length(2,8,'在2-8字符之间'),])

@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% from 'function.html' import render_pagination %}
+{% block title %}{{user.name}}-详情{% endblock%}
+{% block content %}
+<div class="row">
+
+	<div class="col s12 m8 l8">
+		<div class="row card">
+
+			<div class="col s12">
+				<ul class="tabs">
+					<li class="tab col s3">
+                        <a href="#my-posts">
+                            观影记录
+                            <sub>{{user.posts.count()}}</sub>
+                        </a>
+                    </li>
+					<li class="tab col s3">
+                        <a href="#my-articles">
+                            文章
+                            <sub>{{user.articles.count()}}</sub>
+                        </a>
+                    </li>
+				</ul>
+            </div>
+
+			<div id="my-posts" class="col s12">
+				<!-- posts -->
+				{% if posts.items %}
+
+				<div class="box movie">
+                    {% for post in posts.items %}
+                    <div class="card item">
+                        <div class="card-image">
+                            <a href="{{ url_for('post.posts',id=post.id)}}" title="{{post.title}}">
+                                <img src="{{post.post_img}}" alt="{{post.title}}">
+                            </a>
+                            <span class="card-title">{{post.title}}</span>
+                        </div>
+                        <div class="card-action">
+                            <span class="icon-info">
+                                <i class="material-icons">access_time</i>{{post.time.strftime("%Y-%m-%d")}}
+                            </span>
+                            <span class="icon-info">
+                                <i class="material-icons">place</i>{{ post.address}}
+                            </span>
+                        </div>
+                    </div>
+					{% endfor %}
+				</div>
+				{% else %}
+				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% endif %}
+				<!-- pagination -->
+				<div class="center">
+					{{ render_pagination(posts,'post.user_posts',id=user.id) }}
+				</div>
+            </div>
+    
+			<div id="my-articles" class="col s12">
+
+				{% if user.articles %}
+
+				<ul class="collection">
+					{% for item in user.articles %}
+						<a href="{{url_for('article.articles',id=item.id)}}" class="collection-item" title=" {{item.title}}">
+                            {{item.title}}
+                            <span class="right">
+                                {{item.time.strftime("%Y-%m-%d")}}
+                            </span>
+                        </a>
+					{% endfor %}
+				</ul>
+				{% else %}
+				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% endif %}
+			</div>			
+		</div>
+	</div>
+
+	<div class="col s12 m4 l4">
+		<div class="card user-view blue aghten-1">
+			<div class="box user">
+				<img src="{{user.avatar}}" class="circle responsive-img avatar"
+						alt="{{user.name}}" />
+				<span>{{user.name}}</span>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

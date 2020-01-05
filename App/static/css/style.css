@@ -9,6 +9,7 @@ main {
     flex: 1 0 auto;
 }
 
+
 .box {
     display: flex;
     align-items: center;
@@ -63,6 +64,9 @@ main {
 }
 .icon-info {
     display: inline-flex;
+    margin: 0 5px;
+}
+.icon-info i{
     margin: 0 5px;
 }
 .user_img{
@@ -129,4 +133,12 @@ main {
 
 .article-detail{
     padding: 1.5rem;
+}
+
+.movie{
+    justify-content: space-around;
+    flex-flow: row wrap;
+}
+.item{
+    width: 30%;
 }

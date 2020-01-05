@@ -34,10 +34,9 @@ patch_request_class(app,size=None)
 
 
 #分页初始化
-PAGESIZE = 5
+PAGESIZE = 9
 
 #上传保存地址
-UPLOAD_PATH = app.config['UPLOADED_PATH']
 
 UPLOAD_PHOTOS = app.config['UPLOADED_PHOTOS_DEST']
 
