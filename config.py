@@ -2,7 +2,7 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
     #flash需要设置密钥
-    SECRET_KEY = "POiuytreqwdbfg#@$%213"
+    SECRET_KEY = os.urandom(24)
     #格式为mysql + pymysql: // 数据库用户名:密码@数据库地址:端口号/数据库名字？数据库格式
     #出现bug，更换mysql +mysqlconnector
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:7845@localhost:3306/oneappflask?charset=utf8'
@@ -25,3 +25,23 @@ class Config(object):
     UPLOADED_PHOTOS_DEST = BASE_DIR +'\\App\\static\\uploads\\photos'
     #图片大小设置
     MAX_CONTENT_LENGTH = 1024*1024*64
+
+
+
+class ProductionConfig(Config):
+    DEBUG = False
+    TESTING = False
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:7845@localhost:3306/rp?charset=utf8'
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+class TestingConfig(Config):
+    TESTING = True
+
+
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+}
