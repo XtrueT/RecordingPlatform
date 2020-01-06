@@ -1,17 +1,17 @@
-# Myweb
-
 ## 开始
 
- 作为python-flask框架的练手项目
+ 作为python-flask框架的练手项目，主要是一些过一些流程，实际演练一下。
 
-## 致谢
+期待完成：
 
-- [python 3.7.3文档](https://docs.python.org/zh-cn/3/reference/expressions.html#conditional-expressions)
-- [相关数据库处理参考](https://blog.csdn.net/weixin_42750983/article/details/82431257)
-- [flask 框架总结 ](https://blog.csdn.net/weixin_42750983/article/details/82431257)
-- [模版之家](www.cssmoban.com) 等
+1. 用户观影记录的收录。
+2. 用户观影文章收录。
+3. 评论系统的加入。
+4. 全站搜索。
+5. 管理员系统。
 
 ## 相关扩展
+
 ```
 alembic==1.0.8
 aniso8601==6.0.0
@@ -20,7 +20,6 @@ Flask==0.12.4
 Flask-CKEditor==0.4.3
 Flask-Login==0.4.1
 Flask-Migrate==2.4.0
-Flask-RESTful==0.3.7
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
 Flask-Uploads==0.2.1
@@ -43,25 +42,85 @@ Whoosh==2.7.4
 WhooshAlchemy==0.3.1
 WTForms==2.2.1
 ```
-## 功能
+## TODO
 
-- [x] 完成微博客系统的登录注册功能模块
+- [x] 完成记录平台的登录注册功能模块
 - [x] 用户的个人信息维护功能
-- [x] 微博客首页，分页展示文章列表功能
 - [x] CKEditor（文章的撰写，上传图片视频等的富文本编辑器）
-- [x] 微博客的文章新增post功能
-- [x] 微博客的文章修改put功能
-- [x] 微博客的文章删除del功能
-- [ ] 评论功能（暂无）
-- [ ] 加入评论系统，暂时考虑用valine+leancloud实现
-  - [ ] 基于valine的阅读量统计
+- [x] 记录、文章、评论新增功能
+- [x] 评论功能
 - [ ] 全站搜索
-- [x] 界面
-  - [x] 首页整改
-  - [x] 文章分页
-  - [x] 文章页
-## 数据库和项目文件结构 
- - flask 项目结构的搭建 注意
- - 数据库设计
-  - post
-  - user
+- [ ] 管理员系统
+
+## 项目结构
+
+蓝图，按包的方式进行构建几大模块。
+
+## 数据库设计
+
+目前主要是设计为4个表。
+
+用户表：
+
+```
+user:{
+	id,
+	name(昵称),
+	email(帐号),
+	password_hash(密码),
+	last_seen(最近登录时间),
+	avatar(头像),
+	// role
+	// 以下是不存在的键，只是为其他3表的关系。
+	comments(用户评论),
+	posts(用户记录),
+	articles(用户文章),
+}
+```
+
+记录表：
+
+```
+post:{
+	id,
+	title(记录名),
+	content(简单说明),
+	post_img(题图),
+	time(时间),
+	address(地点),
+	user_id(用户外键,提供（post_user）)
+}
+```
+
+文章表：
+
+```
+article:{
+	id,
+	title,
+	content,
+	time,
+	user_id,
+	post_id
+}
+```
+
+评论表：
+
+```
+comment:{
+	id,
+	title(用于保存被回复者的name),
+	content,
+	comm_type(评论类型，1或0用于区分是否是回复),
+	time,
+	to_user_id(是回复则不为null),
+	from_user_id(评论者id),
+	article_id(关于什么文章的评论)
+}
+```
+
+
+
+user --> post-->article -->comment
+
