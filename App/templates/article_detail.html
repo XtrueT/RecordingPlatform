@@ -30,8 +30,8 @@
 		{{ article.content | safe }}
 	</article>
 	<section>
-		<h2>相关评论
-		</h2>
+		<h2>
+			相关评论
 		{% if g.user.is_authenticated %}
 		<form class="form" method="POST" action="{{url_for('comment.new',article_id=article.id)}}" id="comm">
             {{ form.hidden_tag() }}
@@ -50,9 +50,11 @@
 		</form>
 		{% else %}
 		<div>
-			<a href="/login">登录</a>可评论
+			<a href="/login" class="right">登录?发评论</a>
 		</div>
 		{% endif %}
+		</h2>
+
 
 		
 		<div class="collection">

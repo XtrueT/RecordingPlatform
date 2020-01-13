@@ -33,7 +33,7 @@ patch_request_class(app,size=None)
 
 
 #分页初始化
-PAGESIZE = 9
+PAGESIZE = 6
 
 #上传保存地址
 
@@ -41,7 +41,7 @@ UPLOAD_PHOTOS = app.config['UPLOADED_PHOTOS_DEST']
 
 
 #设置默认头像
-DEFAULT_AVATAR = 'http://localhost:5555/_uploads/photos/s_i3nyfHsH31Q3wWvaWF0iXSvzx1mJK7Kh.jpg'
+DEFAULT_AVATAR = 'http://localhost:5555/_uploads/photos/s_image_EQlM1P1oGrbYZ1yYzYoAAYGAPpfZnDeg.jpg'
 
 import App.views
 

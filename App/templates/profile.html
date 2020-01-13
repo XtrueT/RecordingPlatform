@@ -1,17 +1,15 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_pagination %}
 {% block content %}
-<div class="row">
+<main class="row">
 
-	<div class="col s12 m8 l8">
-		<div class="row card">
-			<div class="col s12">
-				<ul class="tabs">
-					<li class="tab col s3"><a href="#my-posts">动态</a></li>
-					<li class="tab col s3"><a href="#my-articles">我的文章</a></li>
-					<li class="tab col s3"><a href="#my-comments">我的评论</a></li>
-				</ul>
-			</div>
+	<div class="cell-md-8 cell-sm-12">
+		<ul class="pos-absolute" data-role="materialtabs">
+			<li><a href="#my-posts">动态</a></li>
+			<li><a href="#my-articles">我的文章</a></li>
+			<li><a href="#my-comments">我的评论</a></li>
+		</ul>
+		<section class="mt-10">
 			<div id="my-posts" class="col s12">
 				<!-- posts -->
 				{% if posts.items %}
@@ -28,59 +26,64 @@
 				<div class="center">
 					{{ render_pagination(posts,'main.profile') }}
 				</div>
-			</div>			
+			</div>
 			<div id="my-articles" class="col s12">
 
 				{% if current_user.articles %}
 
 				<ul class="collection">
 					{% for item in current_user.articles %}
-						<a href="{{url_for('article.articles',id=item.id)}}" class="collection-item" title=" {{item.title}}">
-                            {{item.title}}
-                            <span class="right">
-                                {{item.time.strftime("%Y-%m-%d")}}
-                            </span>
-                        </a>
+					<a href="{{url_for('article.articles',id=item.id)}}" class="collection-item"
+						title=" {{item.title}}">
+						{{item.title}}
+						<span class="right">
+							{{item.time.strftime("%Y-%m-%d")}}
+						</span>
+					</a>
 					{% endfor %}
-				</ul>
-				{% else %}
-				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
-				{% endif %}
-			</div>			
-			<div id="my-comments" class="col s12">
-
-				{% if current_user.comments %}
-				<ul class="collection">
-					{% for item in current_user.comments %}
-						<li class="collection-item">
-							<span class="icon-info">
-								<i class="material-icons">attachment</i>
-								<a href="{{url_for('article.articles',id=item.comment_article.id)}}">{{ item.comment_article.title}}</a>
-							</span>
-							<p>
-								<span>{{item.content}}</span>
-								<span class="text-muted right">{{item.time.strftime("%Y-%m-%d")}}</span>
-							</p>
-						</li>
-					{% endfor %}
-					
 				</ul>
 				{% else %}
 				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
 				{% endif %}
 			</div>
-		</div>
+			<div id="my-comments" class="col s12">
+
+				{% if current_user.comments %}
+				<ul class="collection">
+					{% for item in current_user.comments %}
+					<li class="collection-item">
+						<span class="icon-info">
+							<i class="material-icons">attachment</i>
+							<a
+								href="{{url_for('article.articles',id=item.comment_article.id)}}">{{ item.comment_article.title}}</a>
+						</span>
+						<p>
+							<span>{{item.content}}</span>
+							<span class="text-muted right">{{item.time.strftime("%Y-%m-%d")}}</span>
+						</p>
+					</li>
+					{% endfor %}
+
+				</ul>
+				{% else %}
+				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% endif %}
+			</div>
+		</section>
+
+
 	</div>
 
-	<div class="col s12 m4 l4">
+	<div class="cell-md-4 cell-sm-12">
 		<div class="card user-view blue aghten-1">
 			<div class="box user">
-				<a href="#modal2">
+				<a onclick="Metro.dialog.open('#img-dialog')">
 					<img src="{{current_user.avatar}}" class="circle responsive-img avatar"
 						alt="{{current_user.name}}" />
 				</a>
 				<!-- Modal Trigger -->
-				<a class="waves-effect waves-aght btn modal-trigger" href="#modal1">编辑资料</a>
+				<a class="waves-effect waves-aght btn modal-trigger"
+					onclick="Metro.dialog.open('#change-dialog')">编辑资料</a>
 			</div>
 		</div>
 		<div class="card">
@@ -88,35 +91,37 @@
 				<a href="{{url_for('post.new')}}" class="collection-item">
 					<span class="icon-info">
 						<i class="material-icons ">add</i>
-							新动态
-					</span>
-				</a>				
-				<a class="collection-item">
-					<span class="icon-info">
-						<i class="material-icons ">edit</i>
-							管理我的动态
-					</span>
-				</a>				
-				<a class="collection-item">
-					<span class="icon-info">
-						<i class="material-icons ">edit</i>
-							管理我的文章
+						新动态
 					</span>
 				</a>
 				<a class="collection-item">
 					<span class="icon-info">
 						<i class="material-icons ">edit</i>
-							管理我的评论
+						管理我的动态
+					</span>
+				</a>
+				<a class="collection-item">
+					<span class="icon-info">
+						<i class="material-icons ">edit</i>
+						管理我的文章
+					</span>
+				</a>
+				<a class="collection-item">
+					<span class="icon-info">
+						<i class="material-icons ">edit</i>
+						管理我的评论
 					</span>
 				</a>
 			</ul>
 		</div>
 	</div>
 
-	<!-- Modal Structure -->
-	<div id="modal1" class="modal">
-		<div class="modal-content">
+
+	<div class="dialog" data-role="dialog" id="change-dialog">
+		<div class="dialog-title">
 			<h4>编辑资料</h4>
+		</div>
+		<div class="dialog-content">
 			<form class="form" method="POST">
 				<!-- #实现在配置中激活的csrf保护 -->
 				{{ form.hidden_tag() }}
@@ -134,19 +139,20 @@
 					<span style="color: crimson;">{{error}}</span>
 					{% endfor %}
 				</div>
-				<div class="modal-footer">
-					{{form.submit(class="btn waves-effect waves-aght")}}
-					<a href="#!" class="modal-close waves-effect waves-green btn-flat">
-						取消
-					</a>
+				<div class="dialog-actions">
+					<button class="button js-dialog-close">{{form.submit()}}</button>
+					<button class="button primary js-dialog-close">取消</button>
 				</div>
 			</form>
 		</div>
+
 	</div>
 
-	<div id="modal2" class="modal">
-		<div class="modal-content">
+	<div class="dialog" data-role="dialog" id="img-dialog">
+		<div class="dialog-title">
 			<h4>上传头像</h4>
+		</div>
+		<div class="dialog-content">
 			<form action="{{url_for('main.avatar')}}" method="POST" enctype="multipart/form-data">
 				<!-- #实现在配置中激活的csrf保护 -->
 				{{ img_form.hidden_tag() }}
@@ -165,18 +171,17 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="modal-footer">
-						{{img_form.submit(class="btn waves-effect waves-aght")}}
-						<a href="#!" class="modal-close waves-effect waves-green btn-flat">
-							取消
-						</a>
+					<div class="dialog-actions">
+						<button class="button js-dialog-close">{{form.submit()}}</button>
+						<button class="button primary js-dialog-close">取消</button>
 					</div>
 				</div>
 			</form>
 		</div>
+
 	</div>
 
-</div>
+</main>
 {% endblock %}
 {% block script %}
 <script>

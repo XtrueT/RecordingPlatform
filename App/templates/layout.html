@@ -4,48 +4,83 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	<title>
 		{% block title %}
-			{{ title }} 
+		{{ title }}
 		{% endblock %}
-		-迹 
+		-迹
 	</title>
-	<!--Import Google Icon Font-->
-	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<!--Import materialize.css-->
-	<link rel="stylesheet" href="{{ url_for('static',filename='css/materialize.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/metro-all.min.css') }}">
+
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
 </head>
 
 <body>
-	{% block header %}
-		{% include 'header.html' %}
-	{% endblock %}
 
-	<main class="container">
-		{% block content %}{% endblock %}
-	</main>
+	<aside class="sidebar" data-role="sidebar" data-toggle="#sidebar-toggle" id="_sidebar"
+		data-shift=".content"  data-static-shift=".content" data-static="md">
+		<div class="sidebar-header bg-cyan">
+			<div class="avatar">
+				<img src="{{current_user.avatar}}" alt="{{current_user.name}}" />
+			</div>
+			<span class="title">{{current_user.name}}</span>
+		</div>
 
-	{% block footer %}
-		{% include 'footer.html' %}
-	{% endblock %}
+		<ul class="sidebar-menu">
+			<li {% if title == 'Home' %} class="active" {% endif%}>
+				<a href="{{ url_for('main.home') }}"><span class="mif-home icon"></span>首页</a>
+			</li>
+			{% if g.user.is_authenticated %}
+			<li {% if title == 'Profile' %} class="active" {% endif%}>
+				<a href="{{url_for('main.profile')}}">个人主页</a>
+			</li>
+			<li {% if title == 'Post' %} class="active" {% endif%}>
+				<a href="{{url_for('post.new')}}" class="collection-item">
+					添加新观影记录
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="{{ url_for('main.logout') }}">
+					<span class="mif-zoom-out icon"></span>
+					退出
+				</a>
+			</li>
+			{% else %}
+			<li {% if title == 'Login' %} class="active" {% endif%}>
+				<a href="{{ url_for('main.login') }}">登录</a>
+			</li>
+			<li {% if title == 'Register' %} class="active" {% endif%}>
+				<a href="{{ url_for('main.register') }}">注册</a>
+			</li>
+			{% endif %}
+		</ul>
 
+	</aside>
 
-	<!--Import jQuery before materialize.js-->
-	<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-	<script src="{{ url_for('static',filename='js/materialize.min.js') }}"></script>
+	<div class="content h-100 p-ab">
+		<div class="appbar pos-absolute bg-cyan z-1" data-role="appbar">
+			<button class="app-bar-item c-pointer" id="sidebar-toggle">
+				<span class="mif-menu fg-white"></span>
+			</button>
+		</div>
 
-	<script>
-		$(document).ready(function () {
-			$('.carousel.carousel-slider').carousel({full_width: true});
-			$(".button-collapse").sideNav();
-			$('.modal').modal();
-		})
-	</script>
+		<div class="h-100 p-2">
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+
+	<script src="{{ url_for('static',filename='js/metro.min.js') }}"></script>
+
 	{% block script %} {% endblock %}
 	{% for message in get_flashed_messages() %}
 		<script>
-			Materialize.toast("{{message}}", 3000, 'rounded')
+			var options = {
+				showTop: true,
+				timeout: 3000
+			}
+			Metro.toast.create("{{message}}", null, null,null,options);
 		</script>
 	{%endfor%}
 </body>

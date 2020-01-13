@@ -1,48 +1,26 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_pagination %}
 {% block content %}
-<div class="row">
-    <div class="col s12 m8 l9">
+<main class="row">
+    <div class="cell-md-8 cell-sm-12">
         <!-- user-post -->
         {% if users.items %}
-
-        <section>
+        <h4 class="center"> 所有记录</h4>
+        <section class="collection box user-collection ">
             {% for user in users.items %}
-                <div class="card horizontal">
-                    <div class="card-image">
+            <div class="user-collection-item">
+                <div class="card-image user-image box">
+                    <a href="{{url_for('post.user_posts',id=user.id)}}" title="{{user.name}}">
                         <img src="{{user.avatar}}" alt="{{user.name}}">
-                    </div>
-                    <div class="card-stacked">
-                        <span class="card-title post-title">{{user.name}}的观影记录</span>
-                        <div class="card-content">
-                            <p>
-                                <span class="icon-info">
-                                    <i class="material-icons">movie</i>看过{{ user.posts.count()}}部电影
-                                </span>
-                            </p>
-                            <p>
-                                <span class="icon-info">
-                                    <i class="material-icons">import_contacts</i>写过{{ user.articles.count()}}篇文章
-                                </span>
-                            </p>
-
-                        </div>
-                        <div class="card-action box post-action">
-                            <span class="post-info">
-                                <span class="icon-info">
-                                    <i class="material-icons">access_time</i>
-                                    最近活跃：{{user.last_seen.strftime("%Y-%m-%d")}}
-                                </span>
-                                <span class="icon-info">
-                                    <i class="material-icons">comment</i>{{ user.comments.count()}}
-                                </span>
-                            </span>
-                            <a href="{{url_for('post.user_posts',id=user.id)}}" class="read-more icon-info">
-                                详情
-                            </a>
-                        </div>
-                    </div>
+                    </a>
+                    <span class="user-info">
+                        {{user.last_seen.strftime("%Y-%m-%d")}}
+                    </span>
                 </div>
+                <div>
+                    <span class="truncate">{{user.name}}的观影记录</span>
+                </div>
+            </div>
             {% endfor %}
         </section>
         {% else %}
@@ -54,27 +32,21 @@
         </div>
     </div>
 
-    <div class="col s12 m4 l3">
-        <div class="card">
-            <ul class="collection">
-                {% if g.user.is_authenticated %}
-                <a href="{{url_for('post.new')}}" class="collection-item">
-                    <span class="icon-info">
-                        <i class="material-icons ">add</i>
-                        发布
-                    </span>
-                </a>
-                {% else %}
-                <a href="{{url_for('main.login')}}" class="collection-item">
-                    <span class="icon-info">
-                        <i class="material-icons">add</i>
-                        登录可发布
-                    </span>
-                    {% endif %}
-                </a>
-            </ul>
-        </div>
+    <div class="cell-md-4 cell-sm-12 ">
+        <ul class="collection">
+            <h4 class="center"> 推荐文章</h4>
+            {% for item in articles %}
+            <div class="card">
+                <div class="card-header">
+                    <a href="{{url_for('article.articles',id=item[0].id)}}" title=" {{item[0].title}}">
+                        {{item[0].title}}
+                    </a>
+                    <p class="fg-gray">Posted on {{item[0].time.strftime("%Y-%m-%d")}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
     </div>
 
-</div>
-{% endblock %}
+    </div>
+    {% endblock %}

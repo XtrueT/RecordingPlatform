@@ -13,11 +13,21 @@ from . import main
 @main.route('/')
 @main.route('/home/<int:page>')
 def home(page=1):
-    users = User.query.order_by(db.desc(User.last_seen)).paginate(page,PAGESIZE,False)
+    users = User.query.order_by(db.desc(User.last_seen)).paginate(page,12,False)
+    articles = Article.query.all()
+    articles_list = []
+    for item in articles:
+        comments_num = item.comments.count()
+        articles_list.append([item,comments_num])
+        # 按照评论数进行降序排序
+        articles_list.sort(key=lambda x:x[1],reverse=True)
+    # 截取前5个
+    articles = articles_list[:5]
     return render_template(
         'index.html',
         title='Home',
         users=users,
+        articles = articles,
         year = datetime.now().year
     )
 
