@@ -23,11 +23,15 @@ def posts(id):
 @post.route('/of_users/<int:id>')
 @post.route('/of_users/<int:id>/<int:page>')
 def user_posts(id,page=1):
-    user_posts = Post.query.filter_by(user_id=id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
+    paginate = Post.query.filter_by(user_id=id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
     user = User.query.get(id)
+    tab = request.args.get('tab')
+    if tab == 'article':
+        paginate = Article.query.filter_by(user_id=id).order_by(db.desc(Article.time)).paginate(page,PAGESIZE,False)
     return render_template(
         'user_posts.html',
-        posts=user_posts,
+        paginate=paginate,
+        tab=tab,
         user=user
     )
 

@@ -1,14 +1,34 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_pagination %}
 {% block content %}
-<main class="row">
+<main class="d-flex flex-column-fs">
 
-	<div class="cell-md-8 cell-sm-12">
+	<header>
+		<div>
+			<div class="card user-view blue aghten-1">
+				<div class="box user">
+					<a onclick="Metro.dialog.open('#img-dialog')">
+						<img src="{{current_user.avatar}}" class="circle responsive-img avatar"
+							alt="{{current_user.name}}" />
+					</a>
+					<!-- Modal Trigger -->
+					<a class="waves-effect waves-aght btn modal-trigger"
+						onclick="Metro.dialog.open('#change-dialog')">编辑资料</a>
+				</div>
+			</div>
+		</div>
 		<ul class="pos-absolute" data-role="materialtabs">
 			<li><a href="#my-posts">动态</a></li>
 			<li><a href="#my-articles">我的文章</a></li>
 			<li><a href="#my-comments">我的评论</a></li>
 		</ul>
+	</header>
+
+
+
+
+	<div class="cell-md-8 cell-sm-12">
+
 		<section class="mt-10">
 			<div id="my-posts" class="col s12">
 				<!-- posts -->
@@ -75,45 +95,7 @@
 	</div>
 
 	<div class="cell-md-4 cell-sm-12">
-		<div class="card user-view blue aghten-1">
-			<div class="box user">
-				<a onclick="Metro.dialog.open('#img-dialog')">
-					<img src="{{current_user.avatar}}" class="circle responsive-img avatar"
-						alt="{{current_user.name}}" />
-				</a>
-				<!-- Modal Trigger -->
-				<a class="waves-effect waves-aght btn modal-trigger"
-					onclick="Metro.dialog.open('#change-dialog')">编辑资料</a>
-			</div>
-		</div>
-		<div class="card">
-			<ul class="collection">
-				<a href="{{url_for('post.new')}}" class="collection-item">
-					<span class="icon-info">
-						<i class="material-icons ">add</i>
-						新动态
-					</span>
-				</a>
-				<a class="collection-item">
-					<span class="icon-info">
-						<i class="material-icons ">edit</i>
-						管理我的动态
-					</span>
-				</a>
-				<a class="collection-item">
-					<span class="icon-info">
-						<i class="material-icons ">edit</i>
-						管理我的文章
-					</span>
-				</a>
-				<a class="collection-item">
-					<span class="icon-info">
-						<i class="material-icons ">edit</i>
-						管理我的评论
-					</span>
-				</a>
-			</ul>
-		</div>
+
 	</div>
 
 

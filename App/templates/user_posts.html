@@ -1,91 +1,74 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_pagination %}
-{% block title %}{{user.name}}-详情{% endblock%}
+{% block title %}{{user.name}}{% endblock%}
 {% block content %}
-<div class="row">
+<main class="">
 
-	<div class="col s12 m8 l8">
-		<div class="row card">
-
-			<div class="col s12">
-				<ul class="tabs">
-					<li class="tab col s3">
-                        <a href="#my-posts">
-                            观影记录
-                            <sub>{{user.posts.count()}}</sub>
-                        </a>
-                    </li>
-					<li class="tab col s3">
-                        <a href="#my-articles">
-                            文章
-                            <sub>{{user.articles.count()}}</sub>
-                        </a>
-                    </li>
-				</ul>
-            </div>
-
-			<div id="my-posts" class="col s12">
-				<!-- posts -->
-				{% if posts.items %}
-
-				<div class="box movie">
-                    {% for post in posts.items %}
-                    <div class="card item">
-                        <div class="card-image">
-                            <a href="{{ url_for('post.posts',id=post.id)}}" title="{{post.title}}">
-                                <img src="{{post.post_img}}" alt="{{post.title}}">
-                            </a>
-                            <span class="card-title">{{post.title}}</span>
-                        </div>
-                        <div class="card-action">
-                            <span class="icon-info">
-                                <i class="material-icons">access_time</i>{{post.time.strftime("%Y-%m-%d")}}
-                            </span>
-                            <span class="icon-info">
-                                <i class="material-icons">place</i>{{ post.address}}
-                            </span>
-                        </div>
-                    </div>
-					{% endfor %}
-				</div>
-				{% else %}
-				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
-				{% endif %}
-				<!-- pagination -->
-				<div class="center">
-					{{ render_pagination(posts,'post.user_posts',id=user.id) }}
-				</div>
-            </div>
-    
-			<div id="my-articles" class="col s12">
-
-				{% if user.articles %}
-
-				<ul class="collection">
-					{% for item in user.articles %}
-						<a href="{{url_for('article.articles',id=item.id)}}" class="collection-item" title=" {{item.title}}">
-                            {{item.title}}
-                            <span class="right">
-                                {{item.time.strftime("%Y-%m-%d")}}
-                            </span>
-                        </a>
-					{% endfor %}
-				</ul>
-				{% else %}
-				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
-				{% endif %}
-			</div>			
-		</div>
-	</div>
-
-	<div class="col s12 m4 l4">
-		<div class="card user-view blue aghten-1">
+	<header>
+		<div class="user-view">
 			<div class="box user">
-				<img src="{{user.avatar}}" class="circle responsive-img avatar"
-						alt="{{user.name}}" />
+				<img src="{{user.avatar}}" class="circle responsive-img avatar" alt="{{user.name}}" />
 				<span>{{user.name}}</span>
 			</div>
 		</div>
-	</div>
-</div>
+		<ul class="pos-absolute" data-role="materialtabs" data-fixed-tabs="true" data-deep="true"
+			data-cls-tab="bg-red fg-white text-light" data-cls-tab-active="text-bold fg-yellow"
+			data-cls-marker="bg-orange">
+			<li class="{{ 'active' if tab=='post' else '' }}"><a href="?tab=post">他的记录</a></li>
+			<li class="{{ 'active' if tab=='article' else '' }}"><a href="?tab=article">他的文章</a></li>
+		</ul>
+	</header>
+
+	<section class="mt-12 row flex-justify-around">
+
+		<div class="cell cell-md-8 cell-sm-12">
+			<div class="row">
+				{% if paginate.items %}
+				{% if tab == 'article' %}
+				{% for item in paginate.items %}
+				<a href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}" class="cell-12">
+					{{item.title}}
+					<span class="right">
+						{{item.time.strftime("%Y-%m-%d")}}
+					</span>
+				</a>
+				{% endfor %}
+				{%  else %}
+				{% for item in paginate.items %}
+				<a href="{{ url_for('post.posts',id=item.id)}}" title="{{item.title}}" class="cell-3">
+					<div class="img-container">
+						<img src="{{item.post_img}}" alt="{{item.title}}">
+						<div class="image-overlay">
+							<h2 class="text-light">{{item.title}}</h2>
+							<p>
+								{{item.time.strftime("%Y-%m-%d")}}
+								{{ item.address}}
+							</p>
+						</div>
+					</div>
+				</a>
+				{% endfor %}
+				{% endif %}
+				{% else %}
+				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="cell cell-md-4 cell-sm-12">
+			<div class="card">
+				<h2>他的历程</h2>
+				<p>最近登录：{{user.last_seen}}</p>
+				<p>观影数：{{user.posts.count()}}</p>
+				<p>文章数：{{user.articles.count()}}</p>
+			</div>
+		</div>
+
+	</section>
+
+	<!-- pagination -->
+	<footer>
+		{{ render_pagination(paginate,'post.user_posts',id=user.id,tab=tab) }}
+	</footer>
+</main>
 {% endblock %}

@@ -13,7 +13,7 @@ from . import main
 @main.route('/')
 @main.route('/home/<int:page>')
 def home(page=1):
-    users = User.query.order_by(db.desc(User.last_seen)).paginate(page,12,False)
+    users = User.query.order_by(db.desc(User.last_seen)).paginate(page,PAGESIZE,False)
     articles = Article.query.all()
     articles_list = []
     for item in articles:

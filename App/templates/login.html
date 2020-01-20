@@ -1,45 +1,18 @@
 {% extends "layout.html" %}
-
+{% from 'function.html' import render_field %}
 {% block content %}
-<div class="row">
-    <div class="col m6 s12 offset-m3 card">
+<main class="row flex-justify-center">
+    <div class="cell cell-md-6 cell-sm-12">
         <div class="center">
             <h2>{{ title }}</h2>
         </div>
         <form class="form" method="POST">
             {{ form.hidden_tag() }}
-
-            <div class="input-field">
-                {{ form.email( class="validate" ) }}
-                {{ form.email.label }}
-                {% for error in form.email.errors %}
-                    <span style="color: crimson;">{{error}}</span>
-                {% endfor %}
-            </div>
-
-            <div class="input-field">
-                {{ form.password( class="validate" ) }}
-                {{ form.password.label }}
-                {% for error in form.password.errors %}
-                    <span style="color: crimson;">{{error}}</span>
-                {% endfor %}   
-            </div>
-            
-            <div class="input-field">
-                {{form.remember_me()}}
-                {{form.remember_me.label}}    
-            </div>
-
-            <div class="input-field">
-                <a href="{{url_for('main.register')}}">还没有帐号？去注册</a>
-                <a href="#" class="right">忘记密码？</a>
-            </div>
-
-            <div class="input-field center sub-btn">
-                {{form.submit(class="btn waves-effect waves-light")}}
-            </div>
-
+            {{render_field(form.email)}}
+            {{render_field(form.password)}}
+            {{render_field(form.remember_me)}}
+            {{form.submit}}
         </form>
     </div>
-</div>
+</main>
 {% endblock %}
