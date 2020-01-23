@@ -9,67 +9,75 @@
 		{% block title %}
 		{{ title }}
 		{% endblock %}
-		-迹
+		-Simple Record
 	</title>
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/metro-all.min.css') }}">
-
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
 </head>
 
 <body>
 
-	<aside class="sidebar" data-role="sidebar" data-toggle="#sidebar-toggle" id="_sidebar"
-		data-shift=".content"  data-static-shift=".content" data-static="md">
-		<div class="sidebar-header bg-cyan">
-			<div class="avatar">
-				<img src="{{current_user.avatar}}" alt="{{current_user.name}}" />
-			</div>
-			<span class="title">{{current_user.name}}</span>
-		</div>
-
-		<ul class="sidebar-menu">
-			<li {% if title == 'Home' %} class="active" {% endif%}>
-				<a href="{{ url_for('main.home') }}"><span class="mif-home icon"></span>首页</a>
+	{% block header %}
+	<nav data-role="appbar" data-expand-point="md">
+		<a href="#" class="brand no-hover">
+			<span>Simple Record</span>
+		</a>
+		<ul class="app-bar-menu">
+			<li class="{{ 'active' if title=='Home' else '' }}">
+				<a href="{{ url_for('main.home') }}">
+					<span class="mif-home icon"></span>
+					Home
+				</a>
 			</li>
 			{% if g.user.is_authenticated %}
-			<li {% if title == 'Profile' %} class="active" {% endif%}>
-				<a href="{{url_for('main.profile')}}">个人主页</a>
+			<li class="{{ 'active' if title=='Profile' else '' }}">
+				<a href="{{url_for('main.profile')}}">
+					<span class="mif-profile"></span>
+					Your Profile</a>
 			</li>
-			<li {% if title == 'Post' %} class="active" {% endif%}>
-				<a href="{{url_for('post.new')}}" class="collection-item">
-					添加新观影记录
+			<li class="{{ 'active' if title=='Post' else '' }}">
+				<a href="{{url_for('post.new')}}">
+					<span class="mif-add"></span>
+					Add
 				</a>
 			</li>
-			<li class="divider"></li>
 			<li>
-				<a href="{{ url_for('main.logout') }}">
-					<span class="mif-zoom-out icon"></span>
-					退出
+				<a href="#" class=" app-bar-item dropdown-toggle">
+					<img src="{{current_user.avatar}}" class="border-radius-half" alt="{{current_user.name}}" style="max-width: 52px;"/>
+					{{current_user.name}}
 				</a>
+				<ul class="d-menu w-100" data-role="dropdown">
+					<li>
+						<a href="{{ url_for('main.logout') }}">
+							<span class="mif-settings-power"></span>
+							Logout
+						</a>
+					</li>
+					<li class="divider bg-lightGray"></li>
+					<li><a href="#"><span class="mif-cog"></span>Setting</a></li>
+				</ul>
 			</li>
 			{% else %}
-			<li {% if title == 'Login' %} class="active" {% endif%}>
-				<a href="{{ url_for('main.login') }}">登录</a>
+			<li class="{{ 'active' if title=='Login' else '' }}">
+				<a href="{{ url_for('main.login') }}">
+					<span class="mif-switch"></span>
+					Login
+				</a>
 			</li>
-			<li {% if title == 'Register' %} class="active" {% endif%}>
-				<a href="{{ url_for('main.register') }}">注册</a>
+			<li class="{{ 'active' if title=='Register' else '' }}">
+				<a href="{{ url_for('main.register') }}">
+					<span class="mif-user-plus"></span>
+					Register
+				</a>
 			</li>
 			{% endif %}
 		</ul>
+	</nav>
+	{% endblock %}
 
-	</aside>
-
-	<div class="content h-100 p-ab">
-		<div class="appbar pos-absolute bg-cyan z-1" data-role="appbar">
-			<button class="app-bar-item c-pointer" id="sidebar-toggle">
-				<span class="mif-menu fg-white"></span>
-			</button>
-		</div>
-
-		<div class="h-100 p-2">
-			{% block content %}{% endblock %}
-		</div>
-	</div>
+	{% block content %}{% endblock %}
+	
+	{% block footer %}{% endblock %}
 
 	<script src="{{ url_for('static',filename='js/metro.min.js') }}"></script>
 

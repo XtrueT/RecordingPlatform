@@ -1,47 +1,48 @@
 {% macro render_pagination(pagination, endpoint) %}
-    <ul class="pagination">
-        {% if pagination.pages > 1 %}
+<ul class="pagination">
+    {% if pagination.pages > 1 %}
 
-            {% if pagination.has_prev %}
-                <li class="waves-effect">
-                    <a href="{{ url_for(endpoint, page=pagination.prev_num,**kwargs) }}">
-                        <i class="material-icons">chevron_left</i>
-                    </a>
-                </li>
-            {% endif %}
-        
-            {% for page in pagination.iter_pages() %}
-                {% if page %}
-                    {% if page != pagination.page %}
-                        <li class="waves-effect"><a href="{{ url_for(endpoint, page=page,**kwargs) }}">{{page}}</a></li>
-                    {% else %}
-                        <li class="active blue lighten-1 waves-effect"><a href="#">{{page}}</a></li>
-                    {% endif %}
-                {% else %}
-                    <li class="waves-effect">...</li>
-                {% endif %}
-            {% endfor %}
+    {% if pagination.has_prev %}
+    <li class="page-item">
+        <a href="{{ url_for(endpoint, page=pagination.prev_num,**kwargs) }}" class="page-link">
+            <span class="mif-chevron-left"></span>
+        </a>
+    </li>
+    {% endif %}
 
-            {% if pagination.has_next %}
-            <li class="waves-effect">
-                <a href="{{ url_for(endpoint, page=pagination.next_num,**kwargs) }}">
-                    <i class="material-icons">chevron_right</i>
-                </a>
-            </li>
-            {% endif %}
-        {% endif %}
-    </ul>
+    {% for page in pagination.iter_pages() %}
+    {% if page %}
+    {% if page != pagination.page %}
+    <li class="page-item"><a href="{{ url_for(endpoint, page=page,**kwargs) }}" class="page-link">{{page}}</a></li>
+    {% else %}
+    <li class="active page-item "><span class="page-link">{{page}}</span></li>
+    {% endif %}
+    {% else %}
+    <li class="page-item"><span class="page-link"><span class="mif-more-horiz"></span></span>
+    </li>
+    {% endif %}
+    {% endfor %}
+
+    {% if pagination.has_next %}
+    <li class="page-item">
+        <a href="{{ url_for(endpoint, page=pagination.next_num,**kwargs) }}" class="page-link">
+            <span class="mif-chevron-right"></span>
+        </a>
+    </li>
+    {% endif %}
+    {% endif %}
+</ul>
 {% endmacro %}
 
 
 {% macro render_field(field) %}
-    <div class="form-group">
-        <label>{{field.label}}</label>
-        {{ field( **kwargs ) }}
-        <small class="text-muted error">    
+<div class="form-group">
+    {{field.label}}
+    {{ field( **kwargs ) }}
+    <small class="text-muted error">
         {% for error in field.errors %}
-            {{error}}
+        {{error}}
         {% endfor %}
-        </small>
-    </div>
+    </small>
+</div>
 {% endmacro  %}

@@ -1,4 +1,6 @@
-
+nav .active{
+    background: rgba(29,29,29,.1) !important;
+}
 .nav{
     background: #fff !important;
     color: #000 !important;

@@ -1,18 +1,26 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_field %}
 {% block content %}
-<main class="row flex-justify-center">
-    <div class="cell cell-md-6 cell-sm-12">
-        <div class="center">
-            <h2>{{ title }}</h2>
+
+<main class="container">
+    <div class="row p-16 flex-justify-center">
+        <div class="cell-md-6 cell-sm-12">
+            <header>
+                <h2>{{ title }}</h2>
+            </header>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                {{render_field(form.email)}}
+                {{render_field(form.password)}}
+                <div class="form-group">
+                    {{form.remember_me(data_role="checkbox",data_caption="Remember me")}}
+                </div>
+                <div class="form-group">
+                    {{form.submit(class="w-100")}}
+                </div>
+            </form>
         </div>
-        <form class="form" method="POST">
-            {{ form.hidden_tag() }}
-            {{render_field(form.email)}}
-            {{render_field(form.password)}}
-            {{render_field(form.remember_me)}}
-            {{form.submit}}
-        </form>
     </div>
 </main>
+
 {% endblock %}

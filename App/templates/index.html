@@ -1,52 +1,51 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_pagination %}
+
 {% block content %}
-<main class="row">
-    <div class="cell-md-8 cell-sm-12">
-        <!-- user-post -->
-        {% if users.items %}
-        <h4 class="center"> 所有记录</h4>
-        <section class="collection box user-collection ">
-            {% for user in users.items %}
-            <div class="user-collection-item">
-                <div class="card-image user-image box">
+<main class="container h-100">
+    <div class="row pt-16">
+        <div class="cell-md-8 cell-sm-12 d-flex flex-column">
+            
+            <!-- user-posts -->
+            {% if users.items %}
+            <h2>All Records </h2>
+            <div class="row">
+                {% for user in users.items %}
+                <div class="w-auto cell-md-4 cell-sm-6">
                     <a href="{{url_for('post.user_posts',id=user.id)}}" title="{{user.name}}">
-                        <img src="{{user.avatar}}" alt="{{user.name}}">
+                        <div data-role="tile" data-cover="{{user.avatar}}">
+                            <span class="branding-bar fg-dark">{{user.last_seen.strftime("%Y-%m-%d")}}</span>
+                        </div>
                     </a>
-                    <span class="user-info">
-                        {{user.last_seen.strftime("%Y-%m-%d")}}
-                    </span>
+                    <p><small>by - {{user.name}}</small> </p>
                 </div>
-                <div>
-                    <span class="truncate">{{user.name}}的观影记录</span>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </section>
-        {% else %}
-        <p>暂无用户观影记录</p>
-        {% endif %}
-        <!-- pagination -->
-        <div class="center">
-            {{ render_pagination(users,'main.home') }}
+            {% else %}
+                {% include 'empty.html' %}
+            {% endif %}
+
+            <!-- pagination -->
+            <div class="d-flex flex-justify-center mt-10">
+                {{ render_pagination(users,'main.home') }}
+            </div>
         </div>
-    </div>
 
-    <div class="cell-md-4 cell-sm-12 ">
-        <ul class="collection">
-            <h4 class="center"> 推荐文章</h4>
-            {% for item in articles %}
-            <div class="card">
-                <div class="card-header">
+        <div class="cell-md-4 cell-sm-12 ">
+            <h2>Something...</h2>
+            <ul class="feed-list">
+                <li class="title">The 5 Top Articles</li>
+                {% for item in articles %}
+                <li>
                     <a href="{{url_for('article.articles',id=item[0].id)}}" title=" {{item[0].title}}">
-                        {{item[0].title}}
+                        <span class="label">{{item[0].title}}</span>
                     </a>
-                    <p class="fg-gray">Posted on {{item[0].time.strftime("%Y-%m-%d")}}</p>
-                </div>
-            </div>
-            {% endfor %}
-        </ul>
-    </div>
+                    <span class="second-label">{{item[0].time.strftime("%Y-%m-%d")}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
     </div>
-    {% endblock %}
+</main>
+{% endblock %}
