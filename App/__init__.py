@@ -33,7 +33,7 @@ patch_request_class(app,size=None)
 
 
 #分页初始化
-PAGESIZE = 6
+PAGESIZE = 8
 
 #上传保存地址
 

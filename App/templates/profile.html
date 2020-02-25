@@ -3,31 +3,32 @@
 {% block content %}
 
 
-<main class="d-flex flex-column-fs">
+<main class="container h-100 pt-16">
 
-	<header>
-		<div>
-			<div class="card user-view blue aghten-1">
-				<div class="box user">
-					<a onclick="Metro.dialog.open('#img-dialog')">
-						<img src="{{current_user.avatar}}" class="circle responsive-img avatar"
-							alt="{{current_user.name}}" />
-					</a>
-					<!-- Modal Trigger -->
-					<a class="waves-effect waves-aght btn modal-trigger"
-						onclick="Metro.dialog.open('#change-dialog')">编辑资料</a>
-				</div>
+	<header class="row bg-white flex-column">
+		<div class="row p-3 flex-align-end ">
+			<a onclick="Metro.dialog.open('#img-dialog')">
+				<img src="{{user.avatar}}" class="circle responsive-img avatar" alt="{{user.name}}" />
+			</a>
+			<div>
+				<h2 style="margin: 1rem;">{{user.name}}</h2>
+				<ul class="list-group">
+					<li>看过	{{user.posts.count()}}	部电影</li>
+					<li>写过	{{user.articles.count()}}	篇文章</li>
+					<li>最近活跃：{{user.last_seen}}</li>
+				</ul>
 			</div>
 		</div>
-		<ul class="pos-absolute" data-role="materialtabs">
-			<li><a href="#my-posts">动态</a></li>
-			<li><a href="#my-articles">我的文章</a></li>
-			<li><a href="#my-comments">我的评论</a></li>
+		<ul class="mt-8" data-role="tabs" data-tabs-type="group" data-expand="true">
+			<li class="{{ 'active' if tab=='post' else '' }}"><a href="?tab=post">他的记录</a></li>
+			<li class="{{ 'active' if tab=='article' else '' }}"><a href="?tab=article">他的文章</a></li>
 		</ul>
 	</header>
+	
+	<section class="row">
+	<div class="cell-md-4 cell-sm-12">
 
-
-
+	</div>
 
 	<div class="cell-md-8 cell-sm-12">
 
@@ -38,7 +39,7 @@
 
 				<ul class="collection">
 					{% for post in posts.items %}
-					{% include 'post.html' %}
+
 					{% endfor %}
 				</ul>
 				{% else %}
@@ -95,10 +96,11 @@
 
 
 	</div>
+	</section>
 
-	<div class="cell-md-4 cell-sm-12">
 
-	</div>
+
+
 
 
 	<div class="dialog" data-role="dialog" id="change-dialog">

@@ -1,108 +1,114 @@
 {% extends "layout.html" %}
+{% from 'function.html' import render_field %}
 {% block title %}
 {{ article.title }}
 {% endblock %}
 {% block content %}
-<div class="row card article-detail">
-    <header>
-        <div>
-            <h2>
-                {{ article.title }}
-            </h2>
-            <p class="box">
-                <span class="box">
-                    <img src="{{article.article_user.avatar}}" class="circle avatar post-user-img"
-                        alt="{{article.article_user.name}}" />
-                    {{article.article_user.name}}
-                </span>
-                <span class="icon-info">
-                    <i class="material-icons">access_time</i>
-                    {{article.time.strftime("%Y-%m-%d")}}
-                </span>
-                <span class="icon-info">
-                    <i class="material-icons">attachment</i>
-                    <a href="{{url_for('post.posts',id=article.post_id)}}">{{ article.article_post.title}}</a>
-                </span>
-            </p>
-        </div>
-    </header>
-	<article class="post-content">
-		{{ article.content | safe }}
-	</article>
-	<section>
-		<h2>
-			相关评论
-		{% if g.user.is_authenticated %}
-		<form class="form" method="POST" action="{{url_for('comment.new',article_id=article.id)}}" id="comm">
-            {{ form.hidden_tag() }}
+<main class="container h-100 pt-16">
+	<div class="row flex-justify-center">
 
-            <div class="input-field">
-                {{ form.content( class="materialize-textarea",length="100",id="comm_input") }}
-                {{ form.content.label }}
-                {% for error in form.content.errors %}
-                    <span style="color: crimson;">{{error}}</span>
-                {% endfor %}
-            </div>
-            <div class="input-field center sub-btn">
-                {{form.submit(class="btn waves-effect waves-light")}}
-            </div>
+		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
 
-		</form>
-		{% else %}
-		<div>
-			<a href="/login" class="right">登录?发评论</a>
-		</div>
-		{% endif %}
-		</h2>
+			<article class="post-content bg-white">
+				<h2>{{ article.title }}</h2>
+				<div class="card">
+					<img src="{{article.article_user.avatar}}" class="circle avatar post-user-img"
+						alt="{{article.article_user.name}}" />
+					{{article.article_user.name}}
+					{{article.time.strftime("%Y-%m-%d")}}
+					<a href="{{url_for('post.posts',id=article.post_id)}}">{{ article.article_post.title}}</a>
+				</div>
+				<div class="p-3" style="min-height: 450px;">
+					{{ article.content | safe }}
+				</div>
+			</article>
 
+			<div class="post-content bg-white mt-2">
 
-		
-		<div class="collection">
-			{% for comment in article.comments %}
-			<li class="collection-item">
-				<div class="black-text">
-					<div class="card-footer">
-						<span class="post-info">
-							<span class=" icon-info user">
-								<img src="{{comment.comment_user.avatar}}" alt="{{comment.comment_user.name}}"
-									class="circle">{{comment.comment_user.name}}
-							</span>
-							<span class="icon-info">
-								{{comment.time.strftime("%Y-%m-%d")}}
-							</span>
-						</span>
-					</div>
-					<div class="card-content">
-						{% if comment.comm_type == 0 %}
-							<a href="{{url_for('post.user_posts',id=comment.to_user_id)}}">@回复{{comment.title}}</a>
-						{% endif %}
-						{{comment.content}}
-					</div>
-					
+				<div class="d-flex flex-justify-between">
+					相关评论({{article.comments.count()}})
 					{% if g.user.is_authenticated %}
-                    <div>
-                        <button onclick="reply( `{{ url_for('comment.new',article_id=comment.article_id,to_user=comment.form_user_id) }}` )">回复</button>
-                    </div>
+					<button class="button" onclick="comm(`{{url_for('comment.new',article_id=article.id)}}`)">评论</button>
+					<div class="dialog" data-role="dialog" id="comment-dialog" data-overlay-click-close="true"
+						data-close-button="true">
+						<div class="dialog-title">评论</div>
+						<div class="dialog-content">
+							<form method="POST" action="{{url_for('comment.new',article_id=article.id)}}" id="comm">
+								{{ form.hidden_tag() }}
+								{{form.content(style="resize:none")}}
+								<div class="form-group dialog-actions text-right">
+									{{form.submit()}}
+								</div>
+							</form>
+						</div>
+					</div>
 					{% else %}
-					<div>
-						<a href="/login">登录</a>可回复
+					<div class="text-right">
+						<a href="/login?next={{url_for('article.articles',id=article.id)}}" class="button">登录可评论</a>
 					</div>
 					{% endif %}
-
 				</div>
-			</li>
-			{% endfor %}
+
+				<ul class="card group-list d-flex flex-column-r">
+					{% for comment in article.comments %}
+					<li>
+						<div class="d-flex flex-align-center">
+							<img src="{{comment.comment_user.avatar}}" alt="{{comment.comment_user.name}}"
+								style="width: 35px;" />
+							<span>{{comment.comment_user.name}}</span>
+							<span>{{comment.time.strftime("%Y-%m-%d")}}</span>
+						</div>
+						<div class="p-1">
+							{% if comment.comm_type == 0 %}
+							<a href="{{url_for('post.user_posts',id=comment.to_user_id)}}">@回复{{comment.title}}</a>
+							{% endif %}
+							{{comment.content}}
+						</div>
+						{% if g.user.is_authenticated %}
+						<div>
+							<button class="no-border text-muted" onclick="comm( `{{ url_for('comment.new',article_id=comment.article_id,to_user=comment.form_user_id) }}` )">回复</button>
+						</div>
+						{% else %}
+						<div>
+							<a class="text-muted" href="/login">登录后才能回复</a>
+						</div>
+						{% endif %}
+
+					</li>
+					{% endfor %}
+				</ul>
+
+
+			</div>
 		</div>
 
-		
-	</section>
-</div>
+		<div class="cell-md-3 cell-sm-12 ml-2 ">
+			<div class="bg-white">
+				<img src="{{article.article_user.avatar}}" class="p-1 avatar post-user-img"
+					alt="{{article.article_user.name}}" />
+				<a href="{{url_for('post.user_posts',id=article.user_id)}}" title="{{article.article_user.name}}">{{article.article_user.name}}</a>
+				<div class="p-3">
+					他共写了 {{article.article_user.articles.count()}} 篇文章
+					<br>
+					他看了	{{article.article_user.posts.count()}} 部电影
+				</div>
+			</div>
+			<figure class="mt-2 bg-white">
+				<img src="{{ article.article_post.post_img}}" class="responsive-img p-2"
+					alt="{{ article.article_post.title}}" />
+				<figcaption class="text-center">{{ article.article_post.title}}</figcaption>
+			</figure>
+		</div>
+
+	</div>
+</main>
 {% endblock %}
 {% block script %}
-	<script>
-		function reply(href) {
-			document.getElementById("comm").action = href;
-			$('#comm_input').focus()
-		}
-	</script>	
+<script>
+	function comm(href) {
+		Metro.dialog.open('#comment-dialog');
+		document.getElementById("comm").action = href;
+		$('#content').focus();
+	}
+</script>
 {% endblock %}

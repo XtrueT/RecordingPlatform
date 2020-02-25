@@ -4,56 +4,62 @@
 {% endblock %}
 {% block content %}
 
-<main class="container h-100">
-	<div class="row pt-16">
-		<div class="cell-md-4 cell-sm-12 ">
-			<figure>
-				<img src="{{post.post_img}}" class="responsive-img" alt="{{ post.title }}" />
-				<figcaption class="text-right">{{ post.title }}</figcaption>
-			</figure>
-			<h2>About</h2>
-			<div class="card">
-				<img src="{{post.post_user.avatar}}" class="circle avatar post-user-img"
-					alt="{{post.post_user.name}}" />
-				{{post.post_user.name}}
-				{{post.time.strftime("%Y-%m-%d")}}
-				{{post.address}}
-			</div>
-		</div>
-		<div class="cell-md-8 cell-sm-12 d-flex flex-column">
-			<article class="post-content">
-				<h2>{{ post.title }}</h2>
-				{{ post.content | safe }}
-			</article>
-			<section>
-				<h2>
-					相关文章
-					{% if g.user.is_authenticated %}
-					<a class="text-right" href="{{url_for('article.new',post_id=post.id)}}">去写文章</a>
-					{% else %}
-					<div>
-						<a class="text-right" href="/login">登录?写长评</a>
-					</div>
-					{% endif %}
-				</h2>
-				<ul class="items-list">
-					{% for item in articles %}
-						<li>
-							<img src="{{item.article_user.avatar}}" alt="{{item.article_user.name}}" class="avatar">
-							<span class="second-label">{{item.time.strftime("%Y-%m-%d")}} by -
-								{{item.article_user.name}}</span>
+<main class="container h-100 pt-16">
+	<div class="row flex-justify-center">
 
-						</li>
-						<p>
-							{{item.content | truncate(100,True) |safe }}
+		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
+			
+			<article class="post-content bg-white">
+				<h2>{{ post.title }}</h2>
+				<div class="card">
+					<img src="{{post.post_user.avatar}}" class="circle avatar post-user-img"
+						alt="{{post.post_user.name}}" />
+					{{post.post_user.name}}于
+					{{post.time.strftime("%Y-%m-%d")}}在
+					{{post.address}}观看
+				</div>
+				<div class="p-3" style="min-height: 450px;">
+					{{ post.content | safe }}
+				</div>
+			</article>
+
+			<div class="post-content bg-white mt-2">
+
+				<div class="d-flex flex-justify-between">
+					相关文章
+					<a href="{{url_for('article.new',post_id=post.id)}}">写文章</a>
+				</div>
+
+				<ul class="card group-list">
+					{% for item in articles %}
+					<li>
+						<div class="d-flex flex-align-center">
+							<img src="{{item.article_user.avatar}}" alt="{{item.article_user.name}}" style="width: 35px;"/>
+							<span>《{{item.title}}》</span>
+						</div>
+						<div class="p-1">
+							{{item.content | truncate(100,True) | safe }}
+						</div>
+						<div class="text-right p-1">
 							<a href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}">
-								<span class="second-action fg-red">查看全文</span>
+								<span class="fg-red">全文</span>
 							</a>
-						</p>
+						</div>
+					</li>
 					{% endfor %}
 				</ul>
-			</section>
+
+			</div>
+
 		</div>
+
+		<div class="cell-md-3 cell-sm-12 ml-2 ">
+			<figure class="bg-white">
+				<img src="{{post.post_img}}" class="responsive-img p-2" alt="{{ post.title }}" />
+				<figcaption class="text-center">{{ post.title }}</figcaption>
+			</figure>
+		</div>
+
 	</div>
 </main>
 {% endblock %}

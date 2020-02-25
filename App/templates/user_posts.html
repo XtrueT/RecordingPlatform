@@ -2,36 +2,41 @@
 {% from 'function.html' import render_pagination %}
 {% block title %}{{user.name}}{% endblock%}
 {% block content %}
-<main class="">
+<main class="container h-100 pt-16">
 
-	<header>
-		<div class="user-view">
-			<div class="box user">
-				<img src="{{user.avatar}}" class="circle responsive-img avatar" alt="{{user.name}}" />
-				<span>{{user.name}}</span>
+	<header class="row bg-white flex-column">
+		<div class="row p-3 flex-align-end ">
+			<img src="{{user.avatar}}" class="circle responsive-img avatar" alt="{{user.name}}" />
+			<div>
+				<h2 style="margin: 1rem;">{{user.name}}</h2>
+				<ul class="list-group">
+					<li>看过	{{user.posts.count()}}	部电影</li>
+					<li>写过	{{user.articles.count()}}	篇文章</li>
+					<li>最近活跃：{{user.last_seen}}</li>
+				</ul>
 			</div>
 		</div>
-		<ul class="pos-absolute" data-role="materialtabs" data-fixed-tabs="true" data-deep="true"
-			data-cls-tab="bg-red fg-white text-light" data-cls-tab-active="text-bold fg-yellow"
-			data-cls-marker="bg-orange">
+		<ul class="mt-8" data-role="tabs" data-tabs-type="group" data-expand="true">
 			<li class="{{ 'active' if tab=='post' else '' }}"><a href="?tab=post">他的记录</a></li>
 			<li class="{{ 'active' if tab=='article' else '' }}"><a href="?tab=article">他的文章</a></li>
 		</ul>
 	</header>
 
-	<section class="mt-12 row flex-justify-around">
+	<section class="row">
 
-		<div class="cell cell-md-8 cell-sm-12">
+		<div class="cell cell-md-8 cell-sm-12 bg-white">
 			<div class="row">
 				{% if paginate.items %}
 				{% if tab == 'article' %}
 				{% for item in paginate.items %}
-				<a href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}" class="cell-12">
-					{{item.title}}
-					<span class="right">
+				<div class="p-3 cell-12 d-flex flex-justify-around">
+					<a href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}">
+						《{{item.title}}》
+					</a>
+					<span class="text-muted">
 						{{item.time.strftime("%Y-%m-%d")}}
-					</span>
-				</a>
+					</span>					
+				</div>
 				{% endfor %}
 				{%  else %}
 				{% for item in paginate.items %}
@@ -50,25 +55,19 @@
 				{% endfor %}
 				{% endif %}
 				{% else %}
-				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+				{% include 'empty.html' %}
 				{% endif %}
+			</div>
+				<!-- pagination -->
+			<div>
+				{{ render_pagination(paginate,'post.user_posts',id=user.id,tab=tab) }}
 			</div>
 		</div>
 
-		<div class="cell cell-md-4 cell-sm-12">
-			<div class="card">
-				<h2>他的历程</h2>
-				<p>最近登录：{{user.last_seen}}</p>
-				<p>观影数：{{user.posts.count()}}</p>
-				<p>文章数：{{user.articles.count()}}</p>
-			</div>
+		<div class="cell cell-md-4 cell-sm-12 bg-white text-center">
+			<h4>关注</h4>
 		</div>
 
 	</section>
-
-	<!-- pagination -->
-	<footer>
-		{{ render_pagination(paginate,'post.user_posts',id=user.id,tab=tab) }}
-	</footer>
 </main>
 {% endblock %}
