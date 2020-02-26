@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_pagination %}
+{% from 'function.html' import render_field %}
 {% block content %}
 
 
@@ -7,164 +8,153 @@
 
 	<header class="row bg-white flex-column">
 		<div class="row p-3 flex-align-end ">
-			<a onclick="Metro.dialog.open('#img-dialog')">
-				<img src="{{user.avatar}}" class="circle responsive-img avatar" alt="{{user.name}}" />
+			<a onclick="Metro.dialog.open('#avatar-dialog')">
+				<div class="img-container">
+					<img src="{{current_user.avatar}}" class="img-container img-thumbnail"
+					alt="{{current_user.name}}" />
+					<div class="image-overlay op-dark">
+						更换头像
+					</div>
+				</div>
 			</a>
 			<div>
-				<h2 style="margin: 1rem;">{{user.name}}</h2>
+				<h2 style="margin: 1rem;">{{current_user.name}}</h2>
 				<ul class="list-group">
-					<li>看过	{{user.posts.count()}}	部电影</li>
-					<li>写过	{{user.articles.count()}}	篇文章</li>
-					<li>最近活跃：{{user.last_seen}}</li>
+					<li>看过 {{current_user.posts.count()}} 部电影</li>
+					<li>写过 {{current_user.articles.count()}} 篇文章</li>
+					<li>最近活跃：{{current_user.last_seen}}</li>
 				</ul>
 			</div>
+			<button class="button" onclick="Metro.dialog.open('#editor-dialog')">编辑资料</button>
 		</div>
 		<ul class="mt-8" data-role="tabs" data-tabs-type="group" data-expand="true">
-			<li class="{{ 'active' if tab=='post' else '' }}"><a href="?tab=post">他的记录</a></li>
-			<li class="{{ 'active' if tab=='article' else '' }}"><a href="?tab=article">他的文章</a></li>
+			<li class="{{ 'active' if tab=='post' else '' }}"><a href="{{ url_for('main.profile',tab='post')}}">电影日志</a>
+			</li>
+			<li class="{{ 'active' if tab=='article' else '' }}"><a
+					href="{{ url_for('main.profile',tab='article')}}">文章</a></li>
+			<li class="{{ 'active' if tab=='comment' else '' }}"><a
+					href="{{ url_for('main.profile',tab='comment')}}">评论</a></li>
 		</ul>
 	</header>
-	
-	<section class="row">
-	<div class="cell-md-4 cell-sm-12">
 
-	</div>
+	<section class="row flex-justify-center">
 
-	<div class="cell-md-8 cell-sm-12">
+		<div class="cell cell-md-8 cell-sm-12 bg-white">
+			<div class="row">
+				{% if paginate.items %}
 
-		<section class="mt-10">
-			<div id="my-posts" class="col s12">
-				<!-- posts -->
-				{% if posts.items %}
+				{% if tab == 'article' %}
 
-				<ul class="collection">
-					{% for post in posts.items %}
-
-					{% endfor %}
-				</ul>
-				{% else %}
-				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
-				{% endif %}
-				<!-- pagination -->
-				<div class="center">
-					{{ render_pagination(posts,'main.profile') }}
-				</div>
-			</div>
-			<div id="my-articles" class="col s12">
-
-				{% if current_user.articles %}
-
-				<ul class="collection">
-					{% for item in current_user.articles %}
-					<a href="{{url_for('article.articles',id=item.id)}}" class="collection-item"
-						title=" {{item.title}}">
-						{{item.title}}
-						<span class="right">
-							{{item.time.strftime("%Y-%m-%d")}}
-						</span>
+				{% for item in paginate.items %}
+				<div class="p-3 cell-12 d-flex flex-justify-between">
+					<a href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}">
+						《{{item.title}}》
 					</a>
-					{% endfor %}
-				</ul>
-				{% else %}
-				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
-				{% endif %}
-			</div>
-			<div id="my-comments" class="col s12">
+					<span class="text-muted">
+						{{item.time.strftime("%Y-%m-%d")}}
+					</span>
+				</div>
+				{% endfor %}
 
-				{% if current_user.comments %}
-				<ul class="collection">
-					{% for item in current_user.comments %}
-					<li class="collection-item">
-						<span class="icon-info">
-							<i class="material-icons">attachment</i>
-							<a
-								href="{{url_for('article.articles',id=item.comment_article.id)}}">{{ item.comment_article.title}}</a>
-						</span>
-						<p>
-							<span>{{item.content}}</span>
-							<span class="text-muted right">{{item.time.strftime("%Y-%m-%d")}}</span>
-						</p>
+				{% elif tab == 'comment' %}
+
+				<ul class="p-3">
+					{% for item in paginate.items %}
+					<li>
+						<div class="d-flex flex-align-center">
+							<a href="{{url_for('article.articles',id=item.article_id)}}">
+								<span>《{{item.comment_article.title}}》</span>
+							</a>
+						</div>
+						<div class="p-1">
+							{% if item.comm_type == 0 %}
+							<span class="fg-gray">@回复 {{item.title}} </span>
+							<br>
+							{% endif %}
+							{{item.content}}
+							<br>
+							<span class="text-muted">{{item.time.strftime("%Y-%m-%d")}}</span>
+						</div>
 					</li>
 					{% endfor %}
-
 				</ul>
+
 				{% else %}
-				<p>你什么都没有ヾ(≧O≦)〃嗷~</p>
+
+				{% for item in paginate.items %}
+				<a href="{{ url_for('post.posts',id=item.id)}}" title="{{item.title}}" class="cell-3">
+					<div class="img-container">
+						<img src="{{item.post_img}}" alt="{{item.title}}">
+						<div class="image-overlay op-black">
+							<h2 class="text-light">{{item.title}}</h2>
+							<p>
+								{{item.time.strftime("%Y-%m-%d")}}
+								{{ item.address}}
+							</p>
+						</div>
+					</div>
+				</a>
+				{% endfor %}
+
+				{% endif %}
+
+				{% else %}
+				{% include 'empty.html' %}
 				{% endif %}
 			</div>
-		</section>
+			<!-- pagination -->
+			<div>
+				{{ render_pagination(paginate,'main.profile',tab=tab) }}
+			</div>
+		</div>
 
+		<div class="cell cell-md-4 cell-sm-12 bg-white text-center">
+			<h4>关注</h4>
+		</div>
 
-	</div>
 	</section>
 
-
-
-
-
-
-	<div class="dialog" data-role="dialog" id="change-dialog">
+	<div class="dialog " data-role="dialog" id="editor-dialog" data-close-button="true">
 		<div class="dialog-title">
 			<h4>编辑资料</h4>
 		</div>
 		<div class="dialog-content">
-			<form class="form" method="POST">
+			<form method="POST">
 				<!-- #实现在配置中激活的csrf保护 -->
 				{{ form.hidden_tag() }}
-				<div class="input-field">
-					{{ form.username(class="vaadate") }}
-					{{ form.username.label }}
-					{% for error in form.username.errors %}
-					<span style="color: crimson;">{{error}}</span>
-					{% endfor %}
-				</div>
-				<div class="input-field">
-					{{ form.email(class="vaadate") }}
-					{{ form.email.label }}
-					{% for error in form.email.errors %}
-					<span style="color: crimson;">{{error}}</span>
-					{% endfor %}
-				</div>
-				<div class="dialog-actions">
-					<button class="button js-dialog-close">{{form.submit()}}</button>
-					<button class="button primary js-dialog-close">取消</button>
+				{{render_field(form.username)}}
+				{{render_field(form.email)}}
+				<div class="form-group dialog-actions text-right">
+					{{form.submit()}}
 				</div>
 			</form>
 		</div>
-
 	</div>
 
-	<div class="dialog" data-role="dialog" id="img-dialog">
+	<div class="dialog" data-role="dialog" id="avatar-dialog" data-close-button="true">
 		<div class="dialog-title">
-			<h4>上传头像</h4>
+			<h4>更换头像</h4>
 		</div>
 		<div class="dialog-content">
 			<form action="{{url_for('main.avatar')}}" method="POST" enctype="multipart/form-data">
 				<!-- #实现在配置中激活的csrf保护 -->
 				{{ img_form.hidden_tag() }}
-				<div class="row">
-					<div class="WriteCover-wrapper left" style="width: 50%;">
-						<label class="UploadPicture-wrapper">
-							{{ img_form.upload_photo( class="UploadPicture-input",onchange="getPhoto(this)", accept=".jpeg, .jpg, .png" ) }}
-							<span>头像</span>
-						</label>
-						{% for error in img_form.upload_photo.errors %}
-						<span style="color: crimson;">{{error}}</span>
+				<div class="input-wrapper">
+					<label class="image-label" for="upload_photo" id="upload-label">
+						{{ img_form.upload_photo( class="image-hidden-input",onchange="getPhoto(this)", accept=".jpeg, .jpg, .png" ) }}
+						<span id="upload-text">更换头像</span>
+					</label>
+					<small class="text-muted fg-crimson">
+						{% for error in img_form.upload_photo.errors  %}
+						{{error}}
 						{% endfor %}
-					</div>
-					<div class="file-path-wrapper right" style="width: 50%;">
-						<img id="img_view" src="" />
-					</div>
+					</small>
 				</div>
-				<div class="row">
-					<div class="dialog-actions">
-						<button class="button js-dialog-close">{{form.submit()}}</button>
-						<button class="button primary js-dialog-close">取消</button>
-					</div>
+				<div class="form-group dialog-actions text-right">
+					{{form.submit()}}
 				</div>
 			</form>
 		</div>
-
 	</div>
 
 </main>
@@ -202,11 +192,7 @@
 	}
 
 	function creatImg(imgRUL) {
-		document.getElementById("img_view").src = imgRUL;
-		$("#img_view").addClass("user_img")
-		$('#img_view').viewer({
-			url: 'src',
-		});
+		document.getElementById("upload-text").innerHTML = `<img id="img_view" src="${imgRUL}"/>`;
 	}
 </script>
 {% endblock %}

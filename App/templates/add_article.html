@@ -1,41 +1,25 @@
 {% extends "layout.html" %}
-
+{% from 'function.html' import render_field %}
 {% block content %}
-
-<div class="row">
-    <div class="col s12 m12 l12 card">
-            <div class="center">
+<main class="container container h-100 pt-16">
+    <div class="row bg-white p-16 flex-justify-center">
+        <div class="cell-md-8 cell-sm-12">
+            <header>
                 <h2>{{ title }}</h2>
-            </div>
-            <form class="form" method="POST">
-                <!-- #实现在配置中激活的csrf保护 -->
+            </header>
+            <form method="POST">
                 {{ form.hidden_tag() }}
-
-                <div class="input-field">
-                    {{ form.title( class="validate" ) }}
-                    {{ form.title.label }}
-                    {% for error in form.title.errors %}
-                    <span style="color: crimson;">{{error}}</span>
-                    {% endfor %}
+                {{render_field(form.title)}}
+                <div class="form-group mt-2">
+                    {{form.content()}}
                 </div>
-
-                <div class="input-field">
-                    {{ form.content(class="materialize-textarea",length="900") }}
-                    {{ form.content.label }}
-                    {% for error in form.content.errors %}
-                    <span style="color: crimson;">{{error}}</span>
-                    {% endfor %}
+                <div class="form-group mt-2">
+                    {{form.submit()}}
                 </div>
-
-                <div class="input-field center sub-btn" >
-                    {{form.submit(class="btn waves-effect waves-light")}}
-                </div>
-
             </form>
+        </div>
     </div>
-</div>
-
-
+</main>
 {% endblock %}
 {% block script %}
 {{ super() }}

@@ -6,7 +6,12 @@
 
 	<header class="row bg-white flex-column">
 		<div class="row p-3 flex-align-end ">
-			<img src="{{user.avatar}}" class="circle responsive-img avatar" alt="{{user.name}}" />
+			<div class="img-container">
+				<img src="{{user.avatar}}" class="img-container img-thumbnail" alt="{{user.name}}" />
+				<div class="image-overlay op-dark">
+					更换头像
+				</div>
+			</div>
 			<div>
 				<h2 style="margin: 1rem;">{{user.name}}</h2>
 				<ul class="list-group">
@@ -29,7 +34,7 @@
 				{% if paginate.items %}
 				{% if tab == 'article' %}
 				{% for item in paginate.items %}
-				<div class="p-3 cell-12 d-flex flex-justify-around">
+				<div class="p-3 cell-12 d-flex flex-justify-between">
 					<a href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}">
 						《{{item.title}}》
 					</a>

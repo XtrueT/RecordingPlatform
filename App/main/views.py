@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 from flask import render_template,flash,redirect,url_for,request,g
 from flask_login import current_user,login_user,logout_user,login_required
 from App import PAGESIZE,DEFAULT_AVATAR
-from ..models import db,User,Post,Article
+from ..models import db,User,Post,Article,Comment
 from ..forms import LoginForm,RegisterForm,ProfileForm,UploadForm
 from ..utils import upload_img
 from . import main
@@ -127,14 +127,20 @@ def profile(page=1):
     else:
         form.username.data = current_user.name
         form.email.data = current_user.email
-        user_posts = Post.query.filter_by(user_id=current_user.id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
+    paginate = Post.query.filter_by(user_id=current_user.id).order_by(db.desc(Post.time)).paginate(page,PAGESIZE,False)
+    tab = request.args.get('tab')
+    if tab == 'article':
+        paginate = Article.query.filter_by(user_id=current_user.id).order_by(db.desc(Article.time)).paginate(page,PAGESIZE,False)
+    if tab == 'comment':
+        paginate = Comment.query.filter_by(form_user_id=current_user.id).order_by(db.desc(Comment.time)).paginate(page,PAGESIZE,False)
     return render_template(
         'profile.html',
         title='Profile',
         form=form,
         img_form=img_form,
-        posts=user_posts,
-        year=datetime.now().year
+        year=datetime.now().year,
+        paginate=paginate,
+        tab=tab
     )
 
 

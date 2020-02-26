@@ -9,10 +9,10 @@
 
 		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
 
-			<article class="post-content bg-white">
+			<article class="p-3 bg-white">
 				<h2>{{ article.title }}</h2>
 				<div class="card">
-					<img src="{{article.article_user.avatar}}" class="circle avatar post-user-img"
+					<img src="{{article.article_user.avatar}}" class="image-40 circle"
 						alt="{{article.article_user.name}}" />
 					{{article.article_user.name}}
 					{{article.time.strftime("%Y-%m-%d")}}
@@ -23,7 +23,7 @@
 				</div>
 			</article>
 
-			<div class="post-content bg-white mt-2">
+			<div class="p-3 bg-white mt-2">
 
 				<div class="d-flex flex-justify-between">
 					相关评论({{article.comments.count()}})
@@ -54,7 +54,7 @@
 					<li>
 						<div class="d-flex flex-align-center">
 							<img src="{{comment.comment_user.avatar}}" alt="{{comment.comment_user.name}}"
-								style="width: 35px;" />
+								class="image-40 circle" />
 							<span>{{comment.comment_user.name}}</span>
 							<span>{{comment.time.strftime("%Y-%m-%d")}}</span>
 						</div>
@@ -73,7 +73,6 @@
 							<a class="text-muted" href="/login">登录后才能回复</a>
 						</div>
 						{% endif %}
-
 					</li>
 					{% endfor %}
 				</ul>
@@ -84,7 +83,7 @@
 
 		<div class="cell-md-3 cell-sm-12 ml-2 ">
 			<div class="bg-white">
-				<img src="{{article.article_user.avatar}}" class="p-1 avatar post-user-img"
+				<img src="{{article.article_user.avatar}}" class="image-40 circle p-1"
 					alt="{{article.article_user.name}}" />
 				<a href="{{url_for('post.user_posts',id=article.user_id)}}" title="{{article.article_user.name}}">{{article.article_user.name}}</a>
 				<div class="p-3">

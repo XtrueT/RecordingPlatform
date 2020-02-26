@@ -9,10 +9,10 @@
 
 		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
 			
-			<article class="post-content bg-white">
+			<article class="p-3 bg-white">
 				<h2>{{ post.title }}</h2>
 				<div class="card">
-					<img src="{{post.post_user.avatar}}" class="circle avatar post-user-img"
+					<img src="{{post.post_user.avatar}}" class="image-40 circle"
 						alt="{{post.post_user.name}}" />
 					{{post.post_user.name}}于
 					{{post.time.strftime("%Y-%m-%d")}}在
@@ -23,7 +23,7 @@
 				</div>
 			</article>
 
-			<div class="post-content bg-white mt-2">
+			<div class="p-3 bg-white mt-2">
 
 				<div class="d-flex flex-justify-between">
 					相关文章
@@ -34,7 +34,7 @@
 					{% for item in articles %}
 					<li>
 						<div class="d-flex flex-align-center">
-							<img src="{{item.article_user.avatar}}" alt="{{item.article_user.name}}" style="width: 35px;"/>
+							<img src="{{item.article_user.avatar}}" alt="{{item.article_user.name}}" class="image-40 circle"/>
 							<span>《{{item.title}}》</span>
 						</div>
 						<div class="p-1">

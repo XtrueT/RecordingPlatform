@@ -1,67 +1,44 @@
 {% extends "layout.html" %}
-
+{% from 'function.html' import render_field %}
 {% block content %}
 
-
-<div class="row">
-    <div class="col m6 s12 offset-m3 card">
-        <div class="center">
-            <h2>{{ title }}</h2>
+<main class="container container h-100 pt-16">
+    <div class="row bg-white p-16 flex-justify-center">
+        <div class="cell-md-5 cell-sm-12">
+            <header>
+                <h2>{{ title }}</h2>
+            </header>
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{render_field(form.title)}}
+                <div class="form-group">
+                    {{ form.time( class="validate",type="date" ) }}
+                    <small class="text-muted fg-crimson">
+                        {% for error in form.time.errors  %}
+                        {{error}}
+                        {% endfor %}
+                    </small>
+                </div>
+                {{render_field(form.address)}}
+                {{render_field(form.content)}}
+                <div class="input-wrapper">
+                    <label class="image-label" for="post_img" id="poster">
+                        {{ form.post_img( class="image-hidden-input",onchange="getPhoto(this)", accept=".jpeg, .jpg, .png" ) }}
+                        <span id="upload-text">封面</span>
+                    </label>
+                    <small class="text-muted error">
+                        {% for error in form.post_img.errors  %}
+                        {{error}}
+                        {% endfor %}
+                    </small>
+                </div>
+                <div class="form-group">
+                    {{form.submit()}}
+                </div>
+            </form>
         </div>
-        <form class="form" method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-
-            <div class="input-field">
-                {{ form.title( class="validate" ) }}
-                {{ form.title.label }}
-                {% for error in form.title.errors %}
-                <span style="color: crimson;">{{error}}</span>
-                {% endfor %}
-            </div>
-
-            <div class="input-field">
-                {{ form.time( class="validate",type="date" ) }}
-                {% for error in form.time.errors %}
-                <span style="color: crimson;">{{error}}</span>
-                {% endfor %}
-            </div>
-
-            <div class="input-field">
-                {{ form.address( class="validate" ) }}
-                {{ form.address.label }}
-                {% for error in form.address.errors %}
-                <span style="color: crimson;">{{error}}</span>
-                {% endfor %}
-            </div>
-
-            <div class="input-field">
-                {{ form.content(class="materialize-textarea",length="300") }}
-                {{ form.content.label }}
-                {% for error in form.content.errors %}
-                <span style="color: crimson;">{{error}}</span>
-                {% endfor %}
-            </div>
-
-
-            <div class="WriteCover-wrapper">
-                <label class="UploadPicture-wrapper">
-                    {{ form.post_img( class="UploadPicture-input",onchange="getPhoto(this)", accept=".jpeg, .jpg, .png" ) }}
-                    <span>封面</span>
-                </label>
-                {% for error in form.post_img.errors %}
-                    <span style="color: crimson;">{{error}}</span>
-                {% endfor %}
-            </div>
-            <div class="file-path-wrapper">
-                <img id="img_view2" src="" />
-            </div>
-
-            <div class="input-field center sub-btn" >
-                {{form.submit(class="btn waves-effect waves-light")}}
-            </div>
-        </form>
     </div>
-</div>
+</main>
 {% endblock %}
 {% block script %}
 <script>
@@ -96,12 +73,7 @@
     }
 
     function creatImg(imgRUL) {
-        document.getElementById("img_view2").src = imgRUL;
-        $("#img_view2").addClass("user_img")
-        $('#img_view2').viewer({
-            url: 'src',
-
-        });
+        document.getElementById("upload-text").innerHTML=`<img id="img_view" src="${imgRUL}"/>`;
     }
 </script>
 {% endblock %}

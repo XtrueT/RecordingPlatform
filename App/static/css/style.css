@@ -1,180 +1,63 @@
-nav .active{
-    background: rgba(29,29,29,.1) !important;
+body{
+    overflow-y: scroll;
 }
-.nav{
-    background: #fff !important;
-    color: #000 !important;
-    box-shadow: none !important;
+a{
+    cursor: pointer !important;
+    text-decoration: none;
 }
-
-.nav a{
-    color: #000 !important;
+textarea {
+    resize: vertical;
 }
 
-
-.box {
-    display: flex;
-    display: -webkit-flex;
-    align-items: center;
-}
-
-.user {
-    justify-content: space-around;
-    align-items: center;
-}
-
-.user img {
-    height: 40px;
-}
-
-.error {
-    color: crimson;
-}
-
-.post-user {
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: #fff 2px solid;
-    justify-content: start;
-    align-items: center;
-}
-
-.post-img {
-    max-width: 150px !important;
-    height: 100%;
-}
-
-.post-title {
+input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     position: relative;
-    top: 10px;
-    left: 35px;
-}
-
-.post-info {
-    display: inline-flex;
-    align-items: center;
-}
-.post-action{
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px !important;
-}
-.read-more{
-    position: relative;
-    padding: 5px 20px;
-    border: 1px solid;
-}
-.icon-info {
-    display: inline-flex;
-    margin: 0 5px;
-}
-.icon-info i{
-    margin: 0 5px;
-}
-.user_img{
-    max-width: 50%;
-}
-.user-view{
-    padding: 10px;
-}
-.user-view .user img{
-    height: 100px;
-}
-.WriteCover-wrapper {
-	background: #f6f6f6;
-	line-height: 150px;
-	color: grey;
-	height: 150px;
-    text-align: center;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	position: relative;
-}
-.UploadPicture-input {
-	display: none;
-}
-.UploadPicture-wrapper{
+    border: 1px #d9d9d9 solid;
+    color:#1d1d1d;
+    width: 100%;
     display: block;
+    padding: 0 .75rem;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+    font-size: 1rem;
+    height: 36px;
+    line-height: 36px;
+    background:#fff none;
+    background-clip: border-box;
+    background-clip: padding-box;
+    min-width: 0;
+}
+.input-wrapper {
+    margin-top: 10px;
+    background: #f6f6f6;
+    line-height: 150px;
+    color: grey;
+    text-align: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
 }
 
-.sub-btn{
-    margin-bottom: 20px;
-}
-.post-detail{
-    padding: 1.5rem;
-}
-.post-detail h2,.article-detail h2{
-    border-left: #eee 3px solid;
-    text-align: left;
-    font-size:24px;
-    padding: 20px;
-}
-
-.post-detail header img{
-    height: 400px;
-}
-
-.form{
-    padding: 0 50px;
-}
-
-.post-header{
-    background-image: linear-gradient( 135deg, rgb(210,199,182) 0%,rgb(107,100,86) 75% );
-    justify-content: space-around;
-    align-items: center;
-    color: #fff;
-}
-.post-user-img{
-    height: 40px;
-}
-
-.post-content{
-    padding: 10px 1.5rem;
-}
-
-.article-detail{
-    padding: 1.5rem;
-}
-
-.movie{
-    flex-flow: row wrap;
-}
-.item{
-    width: 30%;
-    margin: 10px;
-}
-
-/* index */
-
-.user-collection{
-    flex-flow: row wrap;
-    position: relative;
-}
-.user-collection-item{
-    margin: 10px;
-    position: relative;
-}
-
-.user-collection-item:hover .user-image img{
-    opacity: 0.8;
-}
-
-.user-image{
-    overflow: hidden;
-    padding: 2px;
-    height: 150px;
-    width: 150px;
+.image-label {
+    display: flex;
     justify-content: center;
-    position: relative;
 }
 
-.user-info{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    color: #fff;
-    background: rgba(34,34,34,0.25);
-    font-size: 12px;
+.image-label img{
+    max-width: 50%;
+    width: 100%;
+}
+.image-hidden-input{
+    display: none !important;
+}
+.image-30{
+    max-width: 30px;
+    width: 100%;
+}
+.image-40{
+    max-width: 40px;
+    width: 100%;
+}
+.circle{
+    border-radius: 50%;
 }
