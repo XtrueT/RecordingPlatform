@@ -1,8 +1,9 @@
 import os
 from datetime import datetime
-from flask import render_template,flash,redirect,url_for,request,g,send_from_directory,current_app
+from flask import render_template,flash,redirect,url_for,request,g,send_from_directory,current_app,abort
 from flask_login import current_user,login_required
 from flask_ckeditor import upload_fail,upload_success
+from sqlalchemy import and_
 from App import app,PAGESIZE
 from ..models import db,Article,Comment
 from ..forms import WriteForm,CommentForm
@@ -14,9 +15,11 @@ from . import article
 def articles(id):
     article = Article.query.get(id)
     form = CommentForm()
+    articles = Article.query.filter(and_(Article.post_id==article.post_id,Article.id != article.id)).limit(5)
     return render_template(
         'article_detail.html',
         article = article,
+        articles = articles,
         form=form,
         year = datetime.now().year
     )
@@ -75,22 +78,21 @@ def new(post_id):
     )
 
 
-@article.route('/new/<int:id>',methods=['GET','POST'])
+@article.route('/update/<int:id>',methods=['GET','POST'])
 @login_required
 def update(id):
     form = WriteForm ()
+    article = Article.query.get(id)
     if form.validate_on_submit():
-        article = Article.query.get(id)
         try:
             article.title = form.title.data
             article.content = form.content.data
             article.time = datetime.now()
             db.session.commit()
+            flash("成功")
+            return redirect(url_for('article.articles',id=article.id))
         except:
             flash('失败')
-            return redirect(url_for('article.new',post_id=post_id))
-        flash("成功")
-        return redirect(url_for('article.articles',id=article.id))
     form.title.data = article.title 
     form.content.data = article.content
     return render_template(
@@ -109,11 +111,13 @@ def remove(id):
         try:
             db.session.delete(article)
             db.session.commit()
-            flash("成功")
+            flash("删除成功")
+            return '删除成功',200
         except:
             flash('Error')
             db.session.rollback()
-    return redirect(url_for('article.user_articles'))
+            abort(500)
+    
 
 
 #开始上传,获取上传文件的url

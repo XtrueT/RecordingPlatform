@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from werkzeug.urls import url_parse
-from flask import render_template,flash,redirect,url_for,request,g
+from flask import render_template,flash,redirect,url_for,request,g,abort
 from flask_login import current_user,login_required
 from App import PAGESIZE,DEFAULT_AVATAR
 from ..models import db,User,Post,Article
@@ -68,22 +68,22 @@ def new():
 @post.route('/<int:id>',methods=['DELETE'])
 @login_required
 def remove(id):
-    post = Post.query.get(id=id)
+    post = Post.query.get(id)
     if post:
         try:
             db.session.delete(post)
             db.session.commit()
-            flash("成功")
+            flash("删除成功")
+            return '删除成功',200
         except:
             flash('Error')
-            db.session.rollback()
-    return redirect(url_for('post.user_posts'))
+            abort(500)
 
 
-@post.route('/update/<int:id>',methods=['GET','PUT'])
+@post.route('/update/<int:id>',methods=['GET','POST'])
 @login_required
 def update(id):
-    post = Post.query.get(id=id)
+    post = Post.query.get(id)
     if post:
         form = PostForm()
         if form.validate_on_submit():
@@ -105,8 +105,10 @@ def update(id):
             form.content.data = post.content
             form.time.data =  post.time
             form.address.data = post.address
+            post_img_src = post.post_img
     return render_template(
         'add_post.html',
         form=form,
+        post_img_src=post_img_src,
         year=datetime.now().year
     )

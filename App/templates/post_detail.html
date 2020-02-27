@@ -8,16 +8,23 @@
 	<div class="row flex-justify-center">
 
 		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
-			
+
 			<article class="p-3 bg-white">
 				<h2>{{ post.title }}</h2>
-				<div class="card">
-					<img src="{{post.post_user.avatar}}" class="image-40 circle"
-						alt="{{post.post_user.name}}" />
-					{{post.post_user.name}}于
-					{{post.time.strftime("%Y-%m-%d")}}在
-					{{post.address}}观看
-				</div>
+				<blockquote class="d-flex flex-align-baseline fg-gray">
+					<img src="{{post.post_user.avatar}}" class="image-40 circle" alt="{{post.post_user.name}}" />
+					{{post.post_user.name}}
+					<i class="mif-alarm ml-1">{{post.time.strftime("%Y-%m-%d")}}</i>
+					<i class="mif-location ml-1">{{post.address}}</i>
+					{% if g.user.is_authenticated %}
+					{% if current_user.id == post.post_user.id %}
+					<a class="button ml-2" href="{{url_for('post.update',id=post.id)}}">
+						编辑
+					</a>
+					<a class="button ml-2" onclick="del(`{{url_for('post.remove',id=post.id)}}`)">删除</a>
+					{% endif %}
+					{% endif %}
+				</blockquote>
 				<div class="p-3" style="min-height: 450px;">
 					{{ post.content | safe }}
 				</div>
@@ -27,14 +34,15 @@
 
 				<div class="d-flex flex-justify-between">
 					相关文章
-					<a href="{{url_for('article.new',post_id=post.id)}}">写文章</a>
+					<a class="button active" href="{{url_for('article.new',post_id=post.id)}}">写文章</a>
 				</div>
 
 				<ul class="card group-list">
 					{% for item in articles %}
 					<li>
 						<div class="d-flex flex-align-center">
-							<img src="{{item.article_user.avatar}}" alt="{{item.article_user.name}}" class="image-40 circle"/>
+							<img src="{{item.article_user.avatar}}" alt="{{item.article_user.name}}"
+								class="image-40 circle" />
 							<span>《{{item.title}}》</span>
 						</div>
 						<div class="p-1">
@@ -53,7 +61,7 @@
 
 		</div>
 
-		<div class="cell-md-3 cell-sm-12 ml-2 ">
+		<div class="cell-md-4 cell-sm-12">
 			<figure class="bg-white">
 				<img src="{{post.post_img}}" class="responsive-img p-2" alt="{{ post.title }}" />
 				<figcaption class="text-center">{{ post.title }}</figcaption>
@@ -62,4 +70,28 @@
 
 	</div>
 </main>
+{% endblock %}
+{% block script %}
+<script>
+	function del(href) {
+		if (confirm('确定删除？')) {
+			// 渲染csrf_token
+			var csrftoken = "{{ csrf_token() }}"
+			$.ajax({
+				method: "DELETE",
+				url: href,
+				headers: {
+					"X-CSRFToken": csrftoken
+				},
+				onSuccess: function (response) {
+					console.log(response);
+					window.location.href = `/profile`;
+				},
+				onFail: function (xhr) {
+					console.log(xhr);
+				}
+			});
+		}
+	}
+</script>
 {% endblock %}

@@ -9,15 +9,25 @@
 
 		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
 
-			<article class="p-3 bg-white">
+			<article class="p-3 bg-white overflow-hidden image">
 				<h2>{{ article.title }}</h2>
-				<div class="card">
-					<img src="{{article.article_user.avatar}}" class="image-40 circle"
-						alt="{{article.article_user.name}}" />
-					{{article.article_user.name}}
-					{{article.time.strftime("%Y-%m-%d")}}
-					<a href="{{url_for('post.posts',id=article.post_id)}}">{{ article.article_post.title}}</a>
-				</div>
+				<blockquote class="d-flex flex-align-baseline fg-gray">
+					<i class="mif-user">{{article.article_user.name}}</i>
+					<i class="mif-alarm ml-1">{{article.time.strftime("%Y-%m-%d")}}</i>
+					<i class="mif-attachment ml-1"> 
+						<a href="{{url_for('post.posts',id=article.post_id)}}">
+							{{ article.article_post.title}}
+						</a>
+					</i>
+					{% if g.user.is_authenticated %}
+						{% if current_user.id == article.article_user.id %}
+						<a class="button ml-2" href="{{url_for('article.update',id=article.id)}}">
+							编辑
+						</a>
+						<a class="button ml-2" onclick="del(`{{url_for('article.remove',id=article.id)}}`)">删除</a>
+						{% endif %}
+					{% endif %}
+				</blockquote>
 				<div class="p-3" style="min-height: 450px;">
 					{{ article.content | safe }}
 				</div>
@@ -26,9 +36,10 @@
 			<div class="p-3 bg-white mt-2">
 
 				<div class="d-flex flex-justify-between">
-					相关评论({{article.comments.count()}})
+					<span>相关评论<span class="fg-red">({{article.comments.count()}})</span></span>
 					{% if g.user.is_authenticated %}
-					<button class="button" onclick="comm(`{{url_for('comment.new',article_id=article.id)}}`)">评论</button>
+					<button class="button active"
+						onclick="comm(`{{url_for('comment.new',article_id=article.id)}}`)">评论</button>
 					<div class="dialog" data-role="dialog" id="comment-dialog" data-overlay-click-close="true"
 						data-close-button="true">
 						<div class="dialog-title">评论</div>
@@ -44,7 +55,8 @@
 					</div>
 					{% else %}
 					<div class="text-right">
-						<a href="/login?next={{url_for('article.articles',id=article.id)}}" class="button">登录可评论</a>
+						<a href="/login?next={{url_for('article.articles',id=article.id)}}"
+							class="button active">登录可评论</a>
 					</div>
 					{% endif %}
 				</div>
@@ -66,7 +78,8 @@
 						</div>
 						{% if g.user.is_authenticated %}
 						<div>
-							<button class="no-border text-muted" onclick="comm( `{{ url_for('comment.new',article_id=comment.article_id,to_user=comment.form_user_id) }}` )">回复</button>
+							<button class="no-border text-muted"
+								onclick="comm( `{{ url_for('comment.new',article_id=comment.article_id,to_user=comment.form_user_id) }}` )">回复</button>
 						</div>
 						{% else %}
 						<div>
@@ -77,26 +90,40 @@
 					{% endfor %}
 				</ul>
 
-
 			</div>
 		</div>
 
-		<div class="cell-md-3 cell-sm-12 ml-2 ">
+		<div class="cell-md-4 cell-sm-12 ">
 			<div class="bg-white">
-				<img src="{{article.article_user.avatar}}" class="image-40 circle p-1"
-					alt="{{article.article_user.name}}" />
-				<a href="{{url_for('post.user_posts',id=article.user_id)}}" title="{{article.article_user.name}}">{{article.article_user.name}}</a>
-				<div class="p-3">
-					他共写了 {{article.article_user.articles.count()}} 篇文章
-					<br>
-					他看了	{{article.article_user.posts.count()}} 部电影
+				<div class="text-center">关于作者</div>
+				<div class="row flex-align-end p-2">
+					<img src="{{article.article_user.avatar}}" class="image-160 circle"
+						alt="{{article.article_user.name}}" />
+					<h2 style="margin: 1rem;"><a href="{{url_for('post.user_posts',id=article.user_id)}}"
+							title="{{article.article_user.name}}">{{article.article_user.name}}</a></h2>
+					<div>
+						<ul class="list-group">
+							<li>他看了 {{article.article_user.posts.count()}} 部电影</li>
+							<li>他共写了 {{article.article_user.articles.count()}} 篇文章</li>
+							<li>最近活跃：{{article.article_user.last_seen}}</li>
+						</ul>
+					</div>
 				</div>
+				<div class="text-center">类似文章</div>
+				<ol class="group-list bg-white">
+					{% for item in articles %}
+					<li>
+						<div class="d-flex">
+							<img src="{{item.article_user.avatar}}" style="width: 35px;" />
+							<a class="ml-3" href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}">
+								{{item.title}}
+							</a>
+						</div>
+						<span class="text-muted">{{item.time.strftime("%Y-%m-%d")}}</span>
+					</li>
+					{% endfor %}
+				</ol>
 			</div>
-			<figure class="mt-2 bg-white">
-				<img src="{{ article.article_post.post_img}}" class="responsive-img p-2"
-					alt="{{ article.article_post.title}}" />
-				<figcaption class="text-center">{{ article.article_post.title}}</figcaption>
-			</figure>
 		</div>
 
 	</div>
@@ -108,6 +135,26 @@
 		Metro.dialog.open('#comment-dialog');
 		document.getElementById("comm").action = href;
 		$('#content').focus();
+	}
+	function del(href){
+		if (confirm('确定删除？')){
+			// 渲染csrf_token
+			var csrftoken = "{{ csrf_token() }}"
+			$.ajax({
+				method: "DELETE",
+				url: href,
+				headers:{
+					"X-CSRFToken": csrftoken
+				},
+				onSuccess: function(response){
+					console.log(response);
+					window.location.href=`/profile?tab=article`;
+				},
+					onFail: function(xhr){
+						console.log(xhr);
+					}
+				});
+		}
 	}
 </script>
 {% endblock %}

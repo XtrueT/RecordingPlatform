@@ -18,7 +18,7 @@
 <body class="bg-gray">
 
 	{% block header %}
-	<nav data-role="appbar" data-expand-point="md">
+	<nav data-role="appbar" data-expand-point="md" class="flex-justify-between">
 		<a href="/" class="brand no-hover">
 			<span>Simple Record</span>
 		</a>
@@ -26,48 +26,46 @@
 			<li class="{{ 'active' if title=='Home' else '' }}">
 				<a href="{{ url_for('main.home') }}">
 					<span class="mif-home icon"></span>
-					Home
+					发现
 				</a>
 			</li>
 			{% if g.user.is_authenticated %}
 			<li class="{{ 'active' if title=='Profile' else '' }}">
 				<a href="{{url_for('main.profile')}}">
 					<span class="mif-profile"></span>
-					Your Profile</a>
+					个人中心</a>
 			</li>
 			<li class="{{ 'active' if title=='Post' else '' }}">
 				<a href="{{url_for('post.new')}}">
 					<span class="mif-add"></span>
-					Add
+					发布
 				</a>
 			</li>
 			<li>
 				<a href="#" class=" app-bar-item dropdown-toggle">
-					<img src="{{current_user.avatar}}" class="circle image-30" alt="{{current_user.name}}"/>
+					<img src="{{current_user.avatar}}" class="circle image-30" alt="{{current_user.name}}" />
 					{{current_user.name}}
 				</a>
-				<ul class="d-menu w-100" data-role="dropdown">
+				<ul class="d-menu w-100 text-center" data-role="dropdown">
 					<li>
 						<a href="{{ url_for('main.logout') }}">
-							<span class="mif-settings-power"></span>
-							Logout
+							<span class="mif-settings-power fg-red" title="退出"></span>
 						</a>
 					</li>
 					<li class="divider bg-lightGray"></li>
-					<li><a href="#"><span class="mif-cog"></span>Setting</a></li>
 				</ul>
 			</li>
 			{% else %}
 			<li class="{{ 'active' if title=='Login' else '' }}">
 				<a href="{{ url_for('main.login') }}">
 					<span class="mif-switch"></span>
-					Login
+					登录
 				</a>
 			</li>
 			<li class="{{ 'active' if title=='Register' else '' }}">
 				<a href="{{ url_for('main.register') }}">
 					<span class="mif-user-plus"></span>
-					Register
+					注册
 				</a>
 			</li>
 			{% endif %}
@@ -76,20 +74,20 @@
 	{% endblock %}
 
 	{% block content %}{% endblock %}
-	
+
 	{% block footer %}{% endblock %}
 
 	<script src="{{ url_for('static',filename='js/metro.min.js') }}"></script>
 
 	{% block script %} {% endblock %}
 	{% for message in get_flashed_messages() %}
-		<script>
-			var options = {
-				showTop: true,
-				timeout: 3000
-			}
-			Metro.toast.create("{{message}}", null, null,null,options);
-		</script>
+	<script>
+		var options = {
+			showTop: true,
+			timeout: 3000
+		}
+		Metro.toast.create("{{message}}", null, null, null, options);
+	</script>
 	{%endfor%}
 </body>
 

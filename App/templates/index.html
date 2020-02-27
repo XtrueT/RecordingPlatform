@@ -4,14 +4,15 @@
 {% block content %}
 <main class="container h-100 pt-16">
     <div class="row flex-justify-center">
-        <div class=" bg-white cell-md-8 cell-sm-12 d-flex flex-column">
-            
+        <div class="cell-md-8 cell-sm-12 d-flex flex-column">
+            <div class=" row bg-white">
+                <h2 class="ml-2">发现♂</h2>
+            </div>
             <!-- user-posts -->
             {% if users.items %}
-            <h2>All Records </h2>
-            <div class="row flex-justify-center">
+            <div class="row bg-white p-3">
                 {% for user in users.items %}
-                <div class="m-2">
+                <div class="m-4">
                     <a href="{{url_for('post.user_posts',id=user.id)}}" title="{{user.name}}">
                         <div data-role="tile" data-cover="{{user.avatar}}">
                             <span class="branding-bar fg-dark">{{user.last_seen.strftime("%Y-%m-%d")}}</span>
@@ -24,29 +25,31 @@
             {% else %}
                 {% include 'empty.html' %}
             {% endif %}
-
             <!-- pagination -->
             <div class="d-flex flex-justify-center mt-10">
                 {{ render_pagination(users,'main.home') }}
             </div>
         </div>
 
-        <div class=" bg-white cell-md-3 cell-sm-12 ml-2">
-            <h2>Top</h2>
-            <ol class="group-list">
-                {% for item in articles %}
-                <li>
-                    <div class="d-flex">
-                        <img src="{{item[0].article_user.avatar}}" style="width: 35px;"/>
-                        <a class="ml-3" href="{{url_for('article.articles',id=item[0].id)}}" title=" {{item[0].title}}">
-                            {{item[0].title}}
-                        </a>
-                    </div>
-                    <span class="text-muted">{{item[0].time.strftime("%Y-%m-%d")}}</span>
-                </li>
-
-                {% endfor %}
-            </ol>
+        <div class="cell-md-4 cell-sm-12 ">
+            <div class="bg-white">
+                <div class="bg-white text-center">
+                    <div style="font-size: 2rem;">推荐阅读</div>
+                </div>
+                <ol class="group-list">
+                    {% for item in articles %}
+                    <li>
+                        <div class="d-flex">
+                            <img src="{{item[0].article_user.avatar}}" style="width: 35px;"/>
+                            <a class="ml-3" href="{{url_for('article.articles',id=item[0].id)}}" title=" {{item[0].title}}">
+                                {{item[0].title}}
+                            </a>
+                        </div>
+                        <span class="text-muted">{{item[0].time.strftime("%Y-%m-%d")}}</span>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
         </div>
 
     </div>

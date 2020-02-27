@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template,flash,redirect,url_for,request,g
+from flask import render_template,flash,redirect,url_for,request,g,abort
 from flask_login import current_user,login_required
 from App import app,PAGESIZE
 from ..models import db,Article,Comment,User,Post
@@ -45,3 +45,18 @@ def new(article_id,to_user=None):
             flash('Error')
             db.session.rollback()
     return redirect(url_for('article.articles',id=article_id))
+
+@comment.route('/<int:id>',methods=['DELETE'])
+@login_required
+def remove(id):
+    comment = Comment.query.get(id)
+    if comment:
+        try:
+            db.session.delete(comment)
+            db.session.commit()
+            flash("删除成功")
+            return '删除成功',200
+        except:
+            flash('Error')
+            db.session.rollback()
+            abort(500)

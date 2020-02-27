@@ -10,7 +10,7 @@
 		<div class="row p-3 flex-align-end ">
 			<a onclick="Metro.dialog.open('#avatar-dialog')">
 				<div class="img-container">
-					<img src="{{current_user.avatar}}" class="img-container img-thumbnail"
+					<img src="{{current_user.avatar}}" class="img-container img-thumbnail image-160"
 					alt="{{current_user.name}}" />
 					<div class="image-overlay op-dark">
 						更换头像
@@ -58,13 +58,23 @@
 
 				{% elif tab == 'comment' %}
 
-				<ul class="p-3">
+				<ul class="p-3 w-100">
 					{% for item in paginate.items %}
-					<li>
-						<div class="d-flex flex-align-center">
-							<a href="{{url_for('article.articles',id=item.article_id)}}">
-								<span>《{{item.comment_article.title}}》</span>
-							</a>
+					<li class="mt-2 border-bottom bd-gray">
+						<div class="d-flex flex-align-center flex-justify-between">
+							<div>
+								{% if item.article_id %}
+								<a href="{{url_for('article.articles',id=item.article_id )}}">
+									<i class="mif-attachment">《{{item.comment_article.title}}》</i>
+								</a>
+								{% else %}
+								<a href="#">
+									<i class="mif-attachment">该文章已被删除</i>
+								</a>
+								{% endif %}
+								<span class="text-muted">{{item.time.strftime("%Y-%m-%d")}}</span>
+							</div>
+							<a class="button" onclick="del(`{{url_for('comment.remove',id=item.id)}}`)">删除</a>
 						</div>
 						<div class="p-1">
 							{% if item.comm_type == 0 %}
@@ -72,8 +82,6 @@
 							<br>
 							{% endif %}
 							{{item.content}}
-							<br>
-							<span class="text-muted">{{item.time.strftime("%Y-%m-%d")}}</span>
 						</div>
 					</li>
 					{% endfor %}
@@ -161,8 +169,6 @@
 {% endblock %}
 {% block script %}
 <script>
-	var imgurl = "";
-
 	function getPhoto(node) {
 		var imgURL = "";
 		try {
@@ -191,8 +197,29 @@
 		return imgURL;
 	}
 
-	function creatImg(imgRUL) {
-		document.getElementById("upload-text").innerHTML = `<img id="img_view" src="${imgRUL}"/>`;
+	function creatImg(imgSrc) {
+		document.getElementById("upload-text").innerHTML = `<img id="img_view" src="${imgSrc}"/>`;
+	}
+
+	function del(href){
+		if (confirm('确定删除？')){
+			// 渲染csrf_token
+			var csrftoken = "{{ csrf_token() }}"
+			$.ajax({
+				method: "DELETE",
+				url: href,
+				headers:{
+					"X-CSRFToken": csrftoken
+				},
+				onSuccess: function(response){
+					console.log(response);
+					window.location.reload();
+				},
+					onFail: function(xhr){
+						console.log(xhr);
+					}
+				});
+		}
 	}
 </script>
 {% endblock %}

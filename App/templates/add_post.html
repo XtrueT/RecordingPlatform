@@ -21,6 +21,13 @@
                 </div>
                 {{render_field(form.address)}}
                 {{render_field(form.content)}}
+                {% if post_img_src %}
+                <div class="input-wrapper">
+                    <div class="image-label">
+                        <img src="{{post_img_src}}"/>
+                    </div>
+                </div>
+                {% endif %}
                 <div class="input-wrapper">
                     <label class="image-label" for="post_img" id="poster">
                         {{ form.post_img( class="image-hidden-input",onchange="getPhoto(this)", accept=".jpeg, .jpg, .png" ) }}
