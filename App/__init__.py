@@ -10,7 +10,7 @@ from flask_uploads import UploadSet,configure_uploads,IMAGES,patch_request_class
 app = Flask(__name__)
 
 #添加配置信息
-app.config.from_object(config.get('development'))
+app.config.from_object(config.get('production'))
 
 # 登录模块初始化
 login = LoginManager(app)

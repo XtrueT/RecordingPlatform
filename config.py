@@ -4,20 +4,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
     #flash需要设置密钥
     SECRET_KEY = os.urandom(24)
-    """
-        数据库连接配置
-        格式为mysql +mysqlconnector: // 数据库用户名:密码@数据库地址:端口号/数据库名字？数据库格式
-    """
-    conn_type = 'mysql+mysqlconnector'
-    user = 'root'
-    password = '7845'
-    host = 'localhost:3306'
-    base_name = 'oneappflask'
-    query = 'charset=utf8'
 
-    SQLALCHEMY_DATABASE_URI = f'{conn_type}://{user}:{password}@{host}/{base_name}?{query}'
-
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
     #设置ckeditor配置,
     # 上传
     CKEDITOR_FILE_UPLOADER ='article.upload'
@@ -42,10 +29,37 @@ class Config(object):
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:7845@localhost:3306/rp?charset=utf8'
+    """
+        数据库连接配置
+        格式为mysql +mysqlconnector: // 数据库用户名:密码@数据库地址:端口号/数据库名字？数据库格式
+    """
+    conn_type = 'mysql+mysqlconnector'
+    user = 'root'
+    password = 'Mh123456!'
+    host = 'localhost:3306'
+    base_name = 'zeez'
+    query = 'charset=utf8'
+
+    SQLALCHEMY_DATABASE_URI = f'{conn_type}://{user}:{password}@{host}/{base_name}?{query}'
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    """
+        数据库连接配置
+        格式为mysql +mysqlconnector: // 数据库用户名:密码@数据库地址:端口号/数据库名字？数据库格式
+    """
+    conn_type = 'mysql+mysqlconnector'
+    user = 'root'
+    password = '7845'
+    host = 'localhost:3306'
+    base_name = 'oneappflask'
+    query = 'charset=utf8'
+
+    SQLALCHEMY_DATABASE_URI = f'{conn_type}://{user}:{password}@{host}/{base_name}?{query}'
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class TestingConfig(Config):
     TESTING = True
