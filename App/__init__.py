@@ -16,6 +16,9 @@ app.config.from_object(config.get('production'))
 login = LoginManager(app)
 # 登录限制
 login.login_view = 'main.login'
+# 未登录提示信息
+login.login_manager = u'请先登录'
+
 
 
 # 富文本ckeditor
