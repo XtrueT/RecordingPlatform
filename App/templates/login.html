@@ -1,25 +1,26 @@
 {% extends "layout.html" %}
 {% from 'function.html' import render_field %}
+
+
 {% block content %}
 
-<main class="container container h-100 pt-16">
-    <div class="row bg-white p-16 flex-justify-center">
-        <div class="cell-md-5 cell-sm-12">
-            <header>
-                <h2>{{ title }}</h2>
-            </header>
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                {{render_field(form.email)}}
-                {{render_field(form.password)}}
-                <div class="form-group">
-                    {{form.remember_me(data_role="checkbox",data_caption="Remember me")}}
-                </div>
-                <div class="form-group">
-                    {{form.submit(class="w-100")}}
-                </div>
-            </form>
-        </div>
+<main class="container h-100 pt-3">
+    <div class="row bg-white p-5 flex-justify-center win-shadow">
+        <header class="col-sm-12 col-md-6 d-flex flex-column flex-justify-between">
+            <h2>{{ title }}</h2>
+            <img src="{{url_for('static',filename='image/logo.png')}}" width="200px"/>
+        </header>
+        <form method="POST" class="col-sm-12 col-md-6">
+            {{ form.hidden_tag() }}
+            {{render_field(form.email)}}
+            {{render_field(form.password)}}
+            <div class="form-group">
+                {{form.remember_me(data_role="checkbox",data_caption="记住我")}}
+            </div>
+            <div class="form-group">
+                {{form.submit(class="w-100 info drop-shadow")}}
+            </div>
+        </form>
     </div>
 </main>
 

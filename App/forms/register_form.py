@@ -4,11 +4,11 @@ from wtforms.validators import DataRequired,ValidationError,Email,EqualTo,Length
 from ..models import User
 
 class RegisterForm(FlaskForm):
-    username = StringField('Username',validators=[DataRequired(),Length(2,8)])
-    email = StringField('Email',validators=[DataRequired(),Email('must be email address')])
-    password = PasswordField('Password',validators=[DataRequired()])
-    password2 = PasswordField('Confirm Password',validators=[DataRequired(),EqualTo('password','passwords entered twice are inconsistent')])
-    submit = SubmitField('Submit')
+    username = StringField('昵称',validators=[DataRequired(),Length(2,8)])
+    email = StringField('邮箱',validators=[DataRequired(),Email('must be email address')])
+    password = PasswordField('密码',validators=[DataRequired()])
+    password2 = PasswordField('确认密码',validators=[DataRequired(),EqualTo('password','passwords entered twice are inconsistent')])
+    submit = SubmitField('注册')
 
     def validate_username(self,username):
         user = User.query.filter_by(name=username.data).first()

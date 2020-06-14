@@ -1,27 +1,32 @@
-body{
+body {
     overflow-y: scroll;
 }
-a{
+
+a {
     cursor: pointer !important;
 }
-a:hover{
+
+a:hover {
     color: inherit;
     text-decoration: none;
 }
+
 textarea {
     resize: vertical;
 }
-article img{
+
+article img {
     max-width: 100% !important;
     height: auto !important;
 }
+
 input[type="date"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     position: relative;
     border: 1px #d9d9d9 solid;
-    color:#1d1d1d;
+    color: #1d1d1d;
     width: 100%;
     display: block;
     padding: 0 .75rem;
@@ -29,11 +34,12 @@ input[type="date"] {
     font-size: 1rem;
     height: 36px;
     line-height: 36px;
-    background:#fff none;
+    background: #fff none;
     background-clip: border-box;
     background-clip: padding-box;
     min-width: 0;
 }
+
 .input-wrapper {
     margin-top: 10px;
     background: #f6f6f6;
@@ -49,29 +55,66 @@ input[type="date"] {
     justify-content: center;
 }
 
-.image-label img{
+.image-label img {
     max-width: 50%;
     width: 100%;
 }
-.image-hidden-input{
+
+.image-hidden-input {
     display: none !important;
 }
-.image-30{
+
+.image-30 {
     max-width: 30px !important;
     width: 100%;
 }
-.image-40{
+
+.image-40 {
     max-width: 40px !important;
     width: 100%;
 }
-.circle{
+
+.circle {
     border-radius: 50%;
 }
-.image-160{
+
+.image-160 {
     max-width: 160px !important;
     width: 100%;
 }
-.active{
-    background: #387891cc !important;
-    color: #f6f6f6 !important;
+
+
+li.active a{
+    color: #fff !important;
+    background-color:#30abe6 !important;
+    border-color:#1891cb !important;
+}
+
+nav ul>li{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+main{
+    flex: 1;
+}
+
+#bg{
+    position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	min-width: 1000px;
+	z-index: -10;
+	zoom: 1;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-position: center 0;
+}
+.error{
+    color: rgb(233, 25, 25) !important;
 }

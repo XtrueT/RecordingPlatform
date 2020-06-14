@@ -2,15 +2,12 @@
 {% from 'function.html' import render_pagination %}
 
 {% block content %}
-<main class="container h-100 pt-16">
+<main class="container h-100 pt-3">
     <div class="row flex-justify-center">
         <div class="cell-md-8 cell-sm-12 d-flex flex-column">
-            <div class=" row bg-white">
-                <h2 class="ml-2">发现♂</h2>
-            </div>
             <!-- user-posts -->
             {% if users.items %}
-            <div class="row bg-white p-3">
+            <div class="row bg-white p-3 win-shadow">
                 {% for user in users.items %}
                 <div class="m-4">
                     <a href="{{url_for('post.user_posts',id=user.id)}}" title="{{user.name}}">
@@ -32,7 +29,7 @@
         </div>
 
         <div class="cell-md-4 cell-sm-12 ">
-            <div class="bg-white">
+            <div class="bg-white win-shadow">
                 <div class="bg-white text-center">
                     <div style="font-size: 2rem;">推荐阅读</div>
                 </div>

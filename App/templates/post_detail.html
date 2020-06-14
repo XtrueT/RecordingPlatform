@@ -4,12 +4,12 @@
 {% endblock %}
 {% block content %}
 
-<main class="container h-100 pt-16">
+<main class="container h-100 pt-3">
 	<div class="row flex-justify-center">
 
 		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
 
-			<article class="p-3 bg-white">
+			<article class="p-3 bg-white win-shadow">
 				<h2>{{ post.title }}</h2>
 				<blockquote class="d-flex flex-align-baseline fg-gray">
 					<img src="{{post.post_user.avatar}}" class="image-40 circle" alt="{{post.post_user.name}}" />
@@ -30,7 +30,7 @@
 				</div>
 			</article>
 
-			<div class="p-3 bg-white mt-2">
+			<div class="p-3 bg-white mt-2 win-shadow">
 
 				<div class="d-flex flex-justify-between">
 					相关文章
@@ -62,7 +62,7 @@
 		</div>
 
 		<div class="cell-md-4 cell-sm-12">
-			<figure class="bg-white">
+			<figure class="bg-white win-shadow">
 				<img src="{{post.post_img}}" class="responsive-img p-2" alt="{{ post.title }}" />
 				<figcaption class="text-center">{{ post.title }}</figcaption>
 			</figure>

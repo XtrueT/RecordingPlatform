@@ -4,12 +4,12 @@
 {{ article.title }}
 {% endblock %}
 {% block content %}
-<main class="container h-100 pt-16">
+<main class="container h-100 pt-3">
 	<div class="row flex-justify-center">
 
-		<div class="cell-md-8 cell-sm-12 d-flex flex-column ">
+		<div class="col-md-8 col-sm-12 d-flex flex-column ">
 
-			<article class="p-3 bg-white overflow-hidden image">
+			<article class="p-3 bg-white overflow-hidden image win-shadow">
 				<h2>{{ article.title }}</h2>
 				<blockquote class="d-flex flex-align-baseline fg-gray">
 					<i class="mif-user">{{article.article_user.name}}</i>
@@ -33,7 +33,7 @@
 				</div>
 			</article>
 
-			<div class="p-3 bg-white mt-2">
+			<div class="p-3 bg-white mt-2 win-shadow">
 
 				<div class="d-flex flex-justify-between">
 					<span>相关评论<span class="fg-red">({{article.comments.count()}})</span></span>
@@ -93,8 +93,8 @@
 			</div>
 		</div>
 
-		<div class="cell-md-4 cell-sm-12 ">
-			<div class="bg-white">
+		<div class="col-md-4 col-sm-12 ">
+			<div class="bg-white win-shadow" >
 				<div class="text-center">关于作者</div>
 				<div class="row flex-align-end p-2">
 					<img src="{{article.article_user.avatar}}" class="image-160 circle"
