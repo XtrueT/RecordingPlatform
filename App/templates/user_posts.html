@@ -42,7 +42,7 @@
 				{% for item in paginate.items %}
 				<a href="{{ url_for('post.posts',id=item.id)}}" title="{{item.title}}" class="col-md-3 col-sm-5">
 					<div class="img-container">
-						<img src="{{item.post_img}}" alt="{{item.title}}" style="height: 250px !important;">
+						<img src="{{item.post_img}}" alt="{{item.title}}" style="height: 280px !important;">
 						<div class="image-overlay op-dark">
 							<h2 class="text-light">{{item.title}}</h2>
 							<p>
