@@ -78,13 +78,13 @@ input[type="date"] {
     border-radius: 50%;
 }
 
-.image-160 {
-    max-width: 160px !important;
+.image-100 {
+    max-width: 100px !important;
     width: 100%;
 }
 
 
-li.active a{
+li.active a,li.active span{
     color: #fff !important;
     background-color:#30abe6 !important;
     border-color:#1891cb !important;

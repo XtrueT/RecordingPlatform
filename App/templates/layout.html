@@ -9,7 +9,7 @@
 		{% block title %}
 		{{ title }}
 		{% endblock %}
-		-Simple Record
+		-我的学习记载
 	</title>
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/metro-all.min.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
@@ -20,37 +20,37 @@
 	{% block header %}
 	<nav class="d-flex flex-justify-between flex-align-baseline flex-wrap pl-2">
 		<a href="/" class="brand no-hover button info drop-shadow ">
-			<span class="pl-3 pr-3">R p</span>
+			<span class="pl-3 pr-3">我的学习记载</span>
 		</a>
 		<ul class="d-flex ">
 			<li class="{{ 'active' if title=='Home' else '' }}">
 				<a href="{{ url_for('main.home') }}" class="button info outline">
-					发现
+					日志广场
 				</a>
 			</li>
 			<li class="{{ 'active' if title=='Profile' else '' }}">
 				<a href="{{url_for('main.profile')}}" class="button info outline">
-					个人中心</a>
+					个人中心
+				</a>
 			</li>			
 			<li class="{{ 'active' if title=='Post' else '' }}">
 				<a href="{{url_for('post.new')}}" class="button info outline">
-					记录中心
+					添加观影日志
 				</a>
 			</li>
 			{% if g.user.is_authenticated %}
-			<li>
-				<div class="split-button">
-						<img src="{{current_user.avatar}}" class="circle image-30" alt="{{current_user.name}}" />
-						{{current_user.name}}
-                    <button class="split dropdown-toggle"></button>
-                    <ul class="d-menu" data-role="dropdown">
-						<li>
-							<a href="{{ url_for('main.logout') }}">
-								退出
-							</a>
-						</li>
-                    </ul>
-                </div>
+			<li class="pos-relative">
+				<div class="dropdown-toggle">
+					<img src="{{current_user.avatar}}" class="circle image-30" alt="{{current_user.name}}">
+					<span class="ml-2">{{current_user.name}}</span>
+				</div>
+				<div class="pos-absolute z-10 shadow-1 mt-2 w-100" data-role="dropdown">
+					<div class="bg-white d-flex flex-justify-between flex-equal-items p-2 bg-light">
+						<a href="{{ url_for('main.logout') }}" class="button alert outline " title="退出"> 
+							退出
+						</a>
+					</div>
+				</div>
 			</li>
 			{% else %}
 			<li class="{{ 'active' if title=='Login' else '' }}">

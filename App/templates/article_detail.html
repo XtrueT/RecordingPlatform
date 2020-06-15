@@ -14,18 +14,18 @@
 				<blockquote class="d-flex flex-align-baseline fg-gray">
 					<i class="mif-user">{{article.article_user.name}}</i>
 					<i class="mif-alarm ml-1">{{article.time.strftime("%Y-%m-%d")}}</i>
-					<i class="mif-attachment ml-1"> 
+					<i class="mif-attachment ml-1">
 						<a href="{{url_for('post.posts',id=article.post_id)}}">
 							{{ article.article_post.title}}
 						</a>
 					</i>
 					{% if g.user.is_authenticated %}
-						{% if current_user.id == article.article_user.id %}
-						<a class="button ml-2" href="{{url_for('article.update',id=article.id)}}">
-							编辑
-						</a>
-						<a class="button ml-2" onclick="del(`{{url_for('article.remove',id=article.id)}}`)">删除</a>
-						{% endif %}
+					{% if current_user.id == article.article_user.id %}
+					<a class="button ml-2" href="{{url_for('article.update',id=article.id)}}">
+						编辑
+					</a>
+					<a class="button ml-2" onclick="del(`{{url_for('article.remove',id=article.id)}}`)">删除</a>
+					{% endif %}
 					{% endif %}
 				</blockquote>
 				<div class="p-3" style="min-height: 450px;">
@@ -94,35 +94,36 @@
 		</div>
 
 		<div class="col-md-4 col-sm-12 ">
-			<div class="bg-white win-shadow" >
-				<div class="text-center">关于作者</div>
-				<div class="row flex-align-end p-2">
-					<img src="{{article.article_user.avatar}}" class="image-160 circle"
+			<div class="d-flex bg-white win-shadow flex-justify-center flex-column p-2">
+				<div class="bg-blue fg-white p-2 text-center">
+					<img src="{{article.article_user.avatar}}" class="image-100 circle"
 						alt="{{article.article_user.name}}" />
-					<h2 style="margin: 1rem;"><a href="{{url_for('post.user_posts',id=article.user_id)}}"
-							title="{{article.article_user.name}}">{{article.article_user.name}}</a></h2>
-					<div>
-						<ul class="list-group">
-							<li>他看了 {{article.article_user.posts.count()}} 部电影</li>
-							<li>他共写了 {{article.article_user.articles.count()}} 篇文章</li>
-							<li>最近活跃：{{article.article_user.last_seen}}</li>
-						</ul>
-					</div>
+					<div class="h4 mb-0"> 
+						<a class="fg-white" href="{{url_for('post.user_posts',id=article.user_id)}}"
+							title="{{article.article_user.name}}">{{article.article_user.name}}</a></div>
 				</div>
-				<div class="text-center">类似文章</div>
-				<ol class="group-list bg-white">
-					{% for item in articles %}
-					<li>
-						<div class="d-flex">
-							<img src="{{item.article_user.avatar}}" style="width: 35px;" />
-							<a class="ml-3" href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}">
-								{{item.title}}
-							</a>
-						</div>
-						<span class="text-muted">{{item.time.strftime("%Y-%m-%d")}}</span>
-					</li>
-					{% endfor %}
-				</ol>
+				<div class="bg-white group-list d-flex  flex-column p-2">
+					<li>他看了 {{article.article_user.posts.count()}} 部电影</li>
+					<li>他共写了 {{article.article_user.articles.count()}} 篇文章</li>
+					<li>最近活跃：{{article.article_user.last_seen}}</li>
+				</div>
+				<div class="bg-white d-flex flex-column">
+					<p class="text-center p-2">类似文章</p>
+					<ol class="group-list bg-white">
+						{% for item in articles %}
+						<li>
+							<div class="d-flex">
+								<img src="{{item.article_user.avatar}}" style="width: 35px;" />
+								<a class="ml-3" href="{{url_for('article.articles',id=item.id)}}"
+									title=" {{item.title}}">
+									{{item.title}}
+								</a>
+							</div>
+							<span class="text-muted">{{item.time.strftime("%Y-%m-%d")}}</span>
+						</li>
+						{% endfor %}
+					</ol>
+				</div>
 			</div>
 		</div>
 
@@ -136,24 +137,25 @@
 		document.getElementById("comm").action = href;
 		$('#content').focus();
 	}
-	function del(href){
-		if (confirm('确定删除？')){
+
+	function del(href) {
+		if (confirm('确定删除？')) {
 			// 渲染csrf_token
 			var csrftoken = "{{ csrf_token() }}"
 			$.ajax({
 				method: "DELETE",
 				url: href,
-				headers:{
+				headers: {
 					"X-CSRFToken": csrftoken
 				},
-				onSuccess: function(response){
+				onSuccess: function (response) {
 					console.log(response);
-					window.location.href=`/profile?tab=article`;
+					window.location.href = `/profile?tab=article`;
 				},
-					onFail: function(xhr){
-						console.log(xhr);
-					}
-				});
+				onFail: function (xhr) {
+					console.log(xhr);
+				}
+			});
 		}
 	}
 </script>

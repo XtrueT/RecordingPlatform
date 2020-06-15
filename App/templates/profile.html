@@ -25,7 +25,7 @@
 					<li>最近活跃：{{current_user.last_seen}}</li>
 				</ul>
 			</div>
-			<button class="button" onclick="Metro.dialog.open('#editor-dialog')">编辑资料</button>
+			<button class="button info outline" onclick="Metro.dialog.open('#editor-dialog')">编辑资料</button>
 		</div>
 		<ul class="mt-8 p-3" data-role="tabs" data-tabs-type="group" data-expand="true">
 			<li class="{{ 'active' if tab=='post' else '' }}"><a href="{{ url_for('main.profile',tab='post')}}">电影日志</a>
@@ -39,7 +39,7 @@
 
 	<section class="row flex-justify-center">
 
-		<div class="col-md-8 col-sm-12 bg-white win-shadow">
+		<div class="col-md-12 col-sm-12 bg-white win-shadow">
 			<div class="row">
 				{% if paginate.items %}
 
@@ -116,10 +116,6 @@
 			</div>
 		</div>
 
-		<div class="col-md-4 col-sm-12 bg-white text-center win-shadow">
-			<h4>关注</h4>
-		</div>
-
 	</section>
 
 	<div class="dialog " data-role="dialog" id="editor-dialog" data-close-button="true">
@@ -159,7 +155,7 @@
 					</small>
 				</div>
 				<div class="form-group dialog-actions text-right">
-					{{form.submit()}}
+					{{form.submit(class="w-100 info drop-shadow")}}
 				</div>
 			</form>
 		</div>

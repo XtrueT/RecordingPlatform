@@ -24,12 +24,12 @@
 
 	<section class="row">
 
-		<div class="col-md-9 col-sm-12 bg-white win-shadow p-1">
-			<div class="row flex-justify-center">
+		<div class="col-md-12 col-sm-12 bg-white win-shadow">
+			<div class="row p-3">
 				{% if paginate.items %}
 				{% if tab == 'article' %}
 				{% for item in paginate.items %}
-				<div class="p-3 cell-12 d-flex flex-justify-between">
+				<div class="p-3 col-md-12 d-flex flex-justify-between">
 					<a href="{{url_for('article.articles',id=item.id)}}" title=" {{item.title}}">
 						《{{item.title}}》
 					</a>
@@ -40,7 +40,7 @@
 				{% endfor %}
 				{%  else %}
 				{% for item in paginate.items %}
-				<a href="{{ url_for('post.posts',id=item.id)}}" title="{{item.title}}" class="col-md-3 col-sm-5">
+				<a href="{{ url_for('post.posts',id=item.id)}}" title="{{item.title}}" class="col-md-2 col-sm-6">
 					<div class="img-container">
 						<img src="{{item.post_img}}" alt="{{item.title}}" style="height: 280px !important;">
 						<div class="image-overlay op-dark">
@@ -63,10 +63,6 @@
 			<div>
 				{{ render_pagination(paginate,'post.user_posts',id=user.id,tab=tab) }}
 			</div>
-		</div>
-
-		<div class="col-md-3 col-sm-12 bg-white text-center win-shadow">
-			<h4>关注</h4>
 		</div>
 
 	</section>
