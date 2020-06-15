@@ -1,6 +1,8 @@
 App/static/uploads/*
 env/*
-
+*.ini
+*.conf
+*.log
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
