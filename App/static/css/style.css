@@ -83,6 +83,11 @@ input[type="date"] {
     width: 100%;
 }
 
+.image-160 {
+    max-width: 160px !important;
+    width: 100%;
+}
+
 
 li.active a,li.active span{
     color: #fff !important;
