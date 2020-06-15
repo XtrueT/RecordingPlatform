@@ -74,7 +74,7 @@
 								{% endif %}
 								<span class="text-muted">{{item.time.strftime("%Y-%m-%d")}}</span>
 							</div>
-							<a class="button" onclick="del(`{{url_for('comment.remove',id=item.id)}}`)">删除</a>
+							<a class="button alert drop-shadow" onclick="del(`{{url_for('comment.remove',id=item.id)}}`)">删除</a>
 						</div>
 						<div class="p-1">
 							{% if item.comm_type == 0 %}
@@ -129,7 +129,7 @@
 				{{render_field(form.username)}}
 				{{render_field(form.email)}}
 				<div class="form-group dialog-actions text-right">
-					{{form.submit()}}
+					{{form.submit(class="w-100 info drop-shadow")}}
 				</div>
 			</form>
 		</div>
